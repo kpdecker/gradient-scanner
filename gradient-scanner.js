@@ -10,8 +10,6 @@ $(document).ready(function() {
     var dragStart, dragEnd;
     $(canvas).mousedown(function(event) {
         dragStart = {x: event.offsetX, y: event.offsetY};
-
-        //$(this).mousemove(event);
     }).mousemove(function(event) {
         if (dragStart) {
             dragEnd = {x: event.offsetX, y: event.offsetY};
