@@ -9,4 +9,14 @@ var ImageDataUtils = {
     getOffset: function(coords, imageData) {
         return (coords.x + coords.y*imageData.width)*4;
     },
+    createCanvasFromImageData: function(imageData) {
+        var canvas = document.createElement("canvas");
+        canvas.setAttribute("width", imageData.width);
+        canvas.setAttribute("height", imageData.height);
+
+        var context = canvas.getContext("2d");
+        context.putImageData(imageData, 0, 0);
+
+        return canvas;
+    },
 };
