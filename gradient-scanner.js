@@ -26,6 +26,10 @@ $(document).ready(function() {
             linePreview.src = stretcher.toDataURL();
         }
     }).mouseup(function(event) {
+        var colorStops = ColorStops.extractColorStops(imageData.data);
+
+        $("#gradientPreview").css("background-image", ColorStops.generateCSS(colorStops));
+
         dragStart = undefined;
     });
 });
