@@ -82,10 +82,10 @@ var ColorStops = {};
     };
 
     ColorStops.generateCSS = function(colorStops) {
-        var stepCSS = colorStops.map(function(stop) {
+        var stopCSS = colorStops.map(function(stop) {
             return "color-stop(" + stop.position + ", RGBA(" + stop.color.join(", ") + "))";
         }).join(", ");
 
-        return "-webkit-gradient(linear, left top, right top, " + stepCSS + ")";
+        return "-webkit-gradient(linear, left top, right top, " + stopCSS + ")";
     };
 })();
