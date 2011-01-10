@@ -19,12 +19,12 @@ $(document).ready(function() {
 
     context.fillRect(0,0,50,50);
 
-    var linearGradient = context.createLinearGradient(300, 300, 600, 600);
+    var linearGradient = context.createLinearGradient(100, 100, 100, 600);
     linearGradient.addColorStop(0, "black");
+    linearGradient.addColorStop(0.5, "red");
     linearGradient.addColorStop(1, "blue");
-    context.strokeStyle = linearGradient;
     context.fillStyle = linearGradient;
-    context.fillRect(100,100,500,500);
+    context.fillRect(100,100,500,600);
 
     drawGradient(75, 75, 25, 55);
     drawGradient(225, 75, 5, 55);
