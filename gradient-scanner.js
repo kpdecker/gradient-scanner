@@ -13,6 +13,7 @@ $(document).ready(function() {
     }).mousemove(function(event) {
         if (dragStart) {
             dragEnd = {x: event.offsetX, y: event.offsetY};
+            $("#lineInfo").text("dragStart: " + JSON.stringify(dragStart) + " dragEnd: " + JSON.stringify(dragEnd) + " deltaX: " + (dragEnd.x-dragStart.x) + " deltaY: "+ (dragEnd.y-dragStart.y) + " m: " + (dragEnd.y-dragStart.y)/(dragEnd.x-dragStart.x));
 
             var imageData = ImageDataUtils.getLinePixels(context, dragStart, dragEnd),
                 stretcher = ImageDataUtils.createCanvasFromImageData(imageData);
