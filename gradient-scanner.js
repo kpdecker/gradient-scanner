@@ -5,12 +5,17 @@
 $(document).ready(function() {
     var canvas = document.getElementById("imageDisplay"),
         linePreview = document.getElementById("linePreview"),
+        colorStopsEl = $("#colorStops"),
         context = canvas.getContext("2d");
+
+    $.template("colorStopTemplate", "<div class=\"colorStop\"> <div class=\"colorPreview\" style=\"background-color: ${colorCss}\"/>${position} ${colorCss}</div>");
 
     var dragStart, dragEnd, imageData;
 
     $(canvas).mousedown(function(event) {
         dragStart = {x: event.offsetX, y: event.offsetY};
+
+        colorStopsEl.html("");
     }).mousemove(function(event) {
         if (dragStart) {
             dragEnd = {x: event.offsetX, y: event.offsetY};
@@ -27,6 +32,14 @@ $(document).ready(function() {
         }
     }).mouseup(function(event) {
         var colorStops = ColorStops.extractColorStops(imageData.data);
+
+        colorStops.forEach(function(stop) {
+            var stopEl = $.tmpl("colorStopTemplate", {
+                position: stop.position,
+                colorCss: "RGBA(" + stop.color.join(", ") + ")"
+            });
+            colorStopsEl.append(stopEl);
+        });
 
         $("#gradientPreview").css("background-image", ColorStops.generateCSS(colorStops));
 

@@ -12,3 +12,12 @@
     width: 300px;
     height: 50px;
 }
+
+.colorStop {
+    padding: 5px;
+}
+.colorPreview {
+    float: left;
+    width: 25px;
+    height: 25px;
+}
