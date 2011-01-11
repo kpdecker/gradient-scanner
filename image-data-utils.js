@@ -30,6 +30,9 @@ var ImageDataUtils = {
             distance = Math.sqrt(Math.pow(rise,2) + Math.pow(run, 2)),
 
             len = distance|0;
+        if (!len) {
+            return;
+        }
 
         // Create our destination image
         var line = context.createImageData(len, 1),
