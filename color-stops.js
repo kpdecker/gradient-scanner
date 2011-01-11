@@ -32,6 +32,24 @@ var ColorStops = {};
             && Math.abs(color1[2]-color2[2]) <= EPSILON
             && Math.abs(color1[3]-color2[3]) <= EPSILON;
     }
+    function stopsLinear(prev, cur, next) {
+        var deltaX = next.position-prev.position,
+            slope = [
+                (next.color[0]-prev.color[0])/deltaX,
+                (next.color[1]-prev.color[1])/deltaX,
+                (next.color[2]-prev.color[2])/deltaX,
+                (next.color[3]-prev.color[3])/deltaX
+            ],
+            curDeltaX = cur.position-prev.position,
+            curEstimate = [
+                prev.color[0]+slope[0]*curDeltaX | 0,
+                prev.color[1]+slope[1]*curDeltaX | 0,
+                prev.color[2]+slope[2]*curDeltaX | 0,
+                prev.color[3]+slope[3]*curDeltaX | 0
+            ];
+
+        return colorsApproxEqual(cur.color, curEstimate);
+    }
     function cullDuplicates(stops) {
         if (stops.length < 2) {
             return;
@@ -45,26 +63,7 @@ var ColorStops = {};
         // Check to see if the current element is on the same line as the previous and next. If so remove.
         var len = stops.length;
         for (var i = 1; i < len-1; i++) {
-            var prev = stops[i-1],
-                cur = stops[i],
-                next = stops[i+1];
-
-            var deltaX = next.position-prev.position,
-                slope = [
-                    (next.color[0]-prev.color[0])/deltaX,
-                    (next.color[1]-prev.color[1])/deltaX,
-                    (next.color[2]-prev.color[2])/deltaX,
-                    (next.color[3]-prev.color[3])/deltaX
-                ],
-                curDeltaX = cur.position-prev.position,
-                curEstimate = [
-                    prev.color[0]+slope[0]*curDeltaX | 0,
-                    prev.color[1]+slope[1]*curDeltaX | 0,
-                    prev.color[2]+slope[2]*curDeltaX | 0,
-                    prev.color[3]+slope[3]*curDeltaX | 0
-                ];
-
-            if (colorsApproxEqual(cur.color, curEstimate)) {
+            if (stopsLinear(stops[i-1], stops[i], stops[i-1])) {
                 stops.splice(i, 1);
                 i--;    len--;
             }
