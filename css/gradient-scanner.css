@@ -6,6 +6,8 @@
 .image-display {
     position: relative;
     display: inline-block;
+
+    cursor: crosshair;
 }
 #lineOverlay {
     position: absolute;
@@ -13,7 +15,7 @@
     height: 5px;
     border: dashed yellow 1px;
 
-    -webkit-transform-origin: left center;
+    -webkit-transform-origin: 2px 2px;  /* linked to both the height and the border. Needs to be adjusted if those are changed */
 }
 
 /* Preview Components */

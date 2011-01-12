@@ -25,6 +25,8 @@ $(document).ready(function() {
                 .css("top", dragStart.y+"px");
 
         colorStopsEl.html("");
+
+        event.preventDefault();
     }).mousemove(function(event) {
         if (dragStart) {
             dragEnd = {x: event.pageX-canvasOffset.left, y: event.pageY-canvasOffset.top};
