@@ -15,21 +15,12 @@ var ImageDataUtils = {
     },
     getLinePixels: function(context, coordStart, coordEnd) {
         // Extract the rectangle that contains our data
-        var topLeft = {x: Math.min(coordStart.x, coordEnd.x), y: Math.min(coordStart.y, coordEnd.y)},
-            bottomRight = {x: Math.max(coordStart.x, coordEnd.x), y: Math.max(coordStart.y, coordEnd.y)},
-            dimensions = {width: Math.max(bottomRight.x-topLeft.x, 1), height: Math.max(bottomRight.y-topLeft.y, 1)},
-
-            image = context.getImageData(topLeft.x, topLeft.y, dimensions.width+1, dimensions.height+1),
+        var containingRect = LineUtils.containingRect(coordStart, coordEnd),
+            image = context.getImageData(containingRect.x, containingRect.y, containingRect.width+1, containingRect.height+1),
             imageData = image.data;
 
         // Determine the properties of our line
-        var rise = coordEnd.y-coordStart.y,
-            run = coordEnd.x-coordStart.x,
-            xIntercept = coordStart.x-topLeft.x,
-            yIntercept = coordStart.y-topLeft.y,
-            distance = Math.sqrt(Math.pow(rise,2) + Math.pow(run, 2)),
-
-            len = distance|0;
+        var len = LineUtils.distance(coordStart, coordEnd)|0;
         if (!len) {
             return;
         }
@@ -38,17 +29,12 @@ var ImageDataUtils = {
         var line = context.createImageData(len, 1),
             lineData = line.data;
 
-        // Scale the run and rise for each step
-        run /= len;
-        rise /= len;
-
-        // Walk the parameterized line extracting the pixel content
-        for (var t = 0; t < len; t++) {
+        LineUtils.walkLine(coordStart, coordEnd, function(t, coords) {
             // TODO : Examine what sort of interpolation or averaging we want to do if we have a non-integer component
-            var coords = {
-                x: (run*t + xIntercept) | 0,
-                y: (rise*t + yIntercept) | 0
-            }
+            // Cast to ints
+            coord.x |= 0;
+            coord.y |= 0;
+
             var offset = ImageDataUtils.getOffset(coords, image);
 
             var lineOffset = t*4;
@@ -56,7 +42,7 @@ var ImageDataUtils = {
             lineData[lineOffset+1] = imageData[offset+1];
             lineData[lineOffset+2] = imageData[offset+2];
             lineData[lineOffset+3] = imageData[offset+3];
-        }
+        });
 
         return line;
     },
