@@ -70,7 +70,7 @@ var ColorStops = {};
         }
 
         // Another special case for the last to remove any repeating sections
-        if (colorsApproxEqual(stops[len-2].color, stops[len-1].color)) {
+        if (len >= 2 && colorsApproxEqual(stops[len-2].color, stops[len-1].color)) {
             stops.splice(len-1, 1);
         }
     }
