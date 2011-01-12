@@ -136,7 +136,9 @@ var ColorStops = {};
     };
 
     ColorStops.generateCSS = function(colorStops) {
-        var stopCSS = colorStops.map(function(stop) {
+        var stopCSS = colorStops.filter(function(stop) {
+            return !stop.disabled;
+        }).map(function(stop) {
             return "color-stop(" + stop.position + ", RGBA(" + stop.color.join(", ") + "))";
         }).join(", ");
 

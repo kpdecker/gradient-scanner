@@ -14,7 +14,7 @@ $(document).ready(function() {
 
     $.template("colorStopTemplate", "<div class=\"colorStop\"> <div class=\"colorPreview\" style=\"background-color: ${colorCss}\"/>${position} ${colorCss}</div>");
 
-    var dragStart, dragEnd, imageData;
+    var dragStart, dragEnd, imageData, colorStops;
 
     canvas.parent().mousedown(function(event) {
         dragStart = {x: event.pageX-canvasOffset.left, y: event.pageY-canvasOffset.top};
@@ -59,18 +59,25 @@ $(document).ready(function() {
                     .css("-webkit-transform", rotate);
         }
     }).mouseup(function(event) {
-        var colorStops = ColorStops.extractColorStops(imageData.data);
+        colorStops = ColorStops.extractColorStops(imageData.data);
 
-        colorStops.forEach(function(stop) {
+        colorStops.forEach(function(stop, index) {
             var stopEl = $.tmpl("colorStopTemplate", {
                 position: stop.position,
                 colorCss: "RGBA(" + stop.color.join(", ") + ")"
             });
+            stopEl.data("stopIndex", index);
             colorStopsEl.append(stopEl);
         });
 
         $("#gradientPreview").css("background-image", ColorStops.generateCSS(colorStops));
 
         dragStart = undefined;
+    });
+    colorStopsEl.delegate(".colorStop", "click", function(event) {
+        var el = $(this);
+        colorStops[el.data("stopIndex")].disabled = el.toggleClass("disabled").hasClass("disabled");
+
+        $("#gradientPreview").css("background-image", ColorStops.generateCSS(colorStops));
     });
 });

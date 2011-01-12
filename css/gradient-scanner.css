@@ -45,6 +45,9 @@
     line-height: 25px;
     padding-bottom: 5px;
 }
+.colorStop.disabled {
+    opacity: 0.5;
+}
 .colorPreview {
     float: left;
     width: 25px;
