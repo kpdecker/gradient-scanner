@@ -33,11 +33,21 @@
     height: 50px;
 }
 
+/* Stop List */
+.stops-list {
+    padding: 10px;
+    max-height: 200px;
+    overflow: auto;
+
+    border: 1px solid #333;
+}
 .colorStop {
-    padding: 5px;
+    line-height: 25px;
+    padding-bottom: 5px;
 }
 .colorPreview {
     float: left;
     width: 25px;
     height: 25px;
+    margin-right: 5px;
 }
