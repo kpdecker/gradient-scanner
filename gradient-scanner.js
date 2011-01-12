@@ -51,9 +51,12 @@ $(document).ready(function() {
 
             // Move the line indicator
             var slopeRads = LineUtils.slopeInRads(dragStart, dragEnd),
-                distance = LineUtils.distance(dragStart, dragEnd);
+                distance = LineUtils.distance(dragStart, dragEnd),
+                rotate = "rotate(" + LineUtils.slopeInRads(dragStart, dragEnd) + "rad)";
             $("#lineOverlay").css("width", distance)
-                    .css("-webkit-transform", "rotate(" + LineUtils.slopeInRads(dragStart, dragEnd) + "rad)");
+                    .css("-moz-transform", rotate)
+                    .css("-o-transform", rotate)
+                    .css("-webkit-transform", rotate);
         }
     }).mouseup(function(event) {
         var colorStops = ColorStops.extractColorStops(imageData.data);

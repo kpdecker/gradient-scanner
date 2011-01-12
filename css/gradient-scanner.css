@@ -15,7 +15,10 @@
     height: 5px;
     border: dashed yellow 1px;
 
-    -webkit-transform-origin: 2px 2px;  /* linked to both the height and the border. Needs to be adjusted if those are changed */
+    /* linked to both the height and the border. Needs to be adjusted if those are changed */
+    -moz-transform-origin: 2px 2px;
+    -o-transform-origin: 2px 2px;
+    -webkit-transform-origin: 2px 2px;
 }
 
 /* Preview Components */
