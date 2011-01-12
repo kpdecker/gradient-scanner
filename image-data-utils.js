@@ -32,8 +32,8 @@ var ImageDataUtils = {
         LineUtils.walkLine(coordStart, coordEnd, function(t, coords) {
             // TODO : Examine what sort of interpolation or averaging we want to do if we have a non-integer component
             // Cast to ints
-            coord.x |= 0;
-            coord.y |= 0;
+            coords.x |= 0;
+            coords.y |= 0;
 
             var offset = ImageDataUtils.getOffset(coords, image);
 
