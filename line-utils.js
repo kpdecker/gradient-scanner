@@ -12,10 +12,14 @@ var LineUtils = {
     distance: function(start, end) {
         return Math.sqrt(Math.pow(end.y-start.y,2) + Math.pow(end.x-start.x, 2));
     },
+    /**
+     * Determines the angle, in radians of the line connected by these two points.
+     * Range: [0, 2PI]
+     */
     slopeInRads: function(start, end) {
         var rise = end.y-start.y,
             run = end.x-start.x;
-        return (run<0 ? Math.PI : 0) + (run ? Math.atan(rise/run) : (rise<0?-1:1)*Math.PI/2);
+        return (run<0 ? Math.PI : (rise<0 ? 2*Math.PI : 0)) + (run ? Math.atan(rise/run) : (rise<0?-1:1)*Math.PI/2);
     },
     walkLine: function(start, end, callback) {
         // Determine the properties of our line
