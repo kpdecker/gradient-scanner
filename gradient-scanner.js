@@ -40,7 +40,14 @@ $(document).ready(function() {
             }
 
             // Output debug info. To be removed after the UI is worked out
-            $("#lineInfo").text("dragStart: " + JSON.stringify(dragStart) + " dragEnd: " + JSON.stringify(dragEnd) + " deltaX: " + (dragEnd.x-dragStart.x) + " deltaY: "+ (dragEnd.y-dragStart.y) + " m: " + (dragEnd.y-dragStart.y)/(dragEnd.x-dragStart.x) + " angle: " + angle);
+            $("#lineInfo").text(""
+                + " dragStart: " + JSON.stringify(dragStart)
+                + " dragEnd: " + JSON.stringify(dragEnd)
+                + " deltaX: " + (dragEnd.x-dragStart.x)
+                + " deltaY: "+ (dragEnd.y-dragStart.y)
+                + " m: " + (dragEnd.y-dragStart.y)/(dragEnd.x-dragStart.x)
+                + " angle: " + angle
+            );
 
             // Collect the line data while the user is dragging
             imageData = ImageDataUtils.getLinePixels(context, dragStart, dragEnd);
@@ -69,6 +76,7 @@ $(document).ready(function() {
             stopEl.data("stopIndex", index);
             colorStopsEl.append(stopEl);
         });
+        $("#stopCount").text("Count: " + colorStops.length);
 
         $("#gradientPreview").css("background-image", ColorStops.generateCSS(colorStops));
 
