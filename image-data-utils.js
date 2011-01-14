@@ -13,6 +13,9 @@ var ImageDataUtils = {
     getOffset: function(coords, imageData) {
         return (coords.x + coords.y*imageData.width)*4;
     },
+    getPixel: function(context, coord) {
+        return context.getImageData(coord.x, coord.y, 1, 1).data;
+    },
     getLinePixels: function(context, coordStart, coordEnd) {
         // Extract the rectangle that contains our data
         var containingRect = LineUtils.containingRect(coordStart, coordEnd),
