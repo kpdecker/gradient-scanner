@@ -21,6 +21,14 @@ ImageDataUtils = {
     getPixel: function(context, coord) {
         return context.getImageData(coord.x, coord.y, 1, 1).data;
     },
+    getWindow: function getSnapToWindow(context, coord, windowSize) {
+        var firstPixel = {x: Math.max(coord.x-windowSize, 0), y: Math.max(coord.y-windowSize, 0)};
+        return {
+            firstPixel: firstPixel,
+            focusPixel: {x: coord.x-firstPixel.x, y: coord.y-firstPixel.y},
+            imageData: context.getImageData(firstPixel.x, firstPixel.y, 2*windowSize, 2*windowSize)
+        };
+    },
     getLinePixels: function(context, coordStart, coordEnd) {
         // Extract the rectangle that contains our data
         var containingRect = LineUtils.containingRect(coordStart, coordEnd),
