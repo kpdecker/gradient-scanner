@@ -14,18 +14,20 @@ $(document).ready(function() {
 
     $.template("colorStopTemplate", "<div class=\"colorStop\"> <div class=\"colorPreview\" style=\"background-color: ${colorCss}\"/>${position} ${colorCss}</div>");
 
+    var dragStart, dragEnd, imageData, colorStops, edgeContext;
+
     // TODO : Replace this with an actual loader once we are at that point
-    var edgeContext;
     $("#edgeDebug").load(function() {
         var loadOptions = {};
         $(this).pixastic("edges", loadOptions);
+        edgeContext = loadOptions.resultCanvas.getContext("2d");
     });
-
-    var dragStart, dragEnd, imageData, colorStops;
 
     canvas.parent().mousedown(function(event) {
         dragStart = {x: event.pageX-canvasOffset.left, y: event.pageY-canvasOffset.top};
 
+        var edgeSnaps = ImageDataUtils.getInitialSnapToTarget(edgeContext, dragStart);
+        dragStart = edgeSnaps || dragStart;
         // Init the line overlay
         $("#lineOverlay").css("width", "0px")
                 .css("left", dragStart.x+"px")
@@ -45,6 +47,10 @@ $(document).ready(function() {
             } else if (Math.abs(Math.PI/2-angle) < SNAP_TO_ANGLE || Math.abs(3*Math.PI/2-angle) < SNAP_TO_ANGLE) {
                 dragEnd.x = dragStart.x;
             }
+
+            // Check for edge snapto
+            var edgeSnap = ImageDataUtils.getSnapToTarget(edgeContext, dragStart, dragEnd);
+            dragEnd = edgeSnap || dragEnd;
 
             // Output debug info. To be removed after the UI is worked out
             $("#lineInfo").text(""
