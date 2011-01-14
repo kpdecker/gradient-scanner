@@ -1,3 +1,6 @@
 [submodule "lib/jquery-tmpl"]
 	path = lib/jquery-tmpl
 	url = https://github.com/jquery/jquery-tmpl.git
+[submodule "lib/pixastic"]
+	path = lib/pixastic
+	url = git@github.com:kpdecker/pixastic.git
