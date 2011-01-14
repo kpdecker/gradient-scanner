@@ -36,7 +36,11 @@ ImageDataUtils = {
         return {
             firstPixel: firstPixel,
             focusPixel: {x: coord.x-firstPixel.x, y: coord.y-firstPixel.y},
-            imageData: context.getImageData(firstPixel.x, firstPixel.y, 2*windowSize, 2*windowSize)
+            imageData: context.getImageData(
+                firstPixel.x,
+                firstPixel.y,
+                Math.min(2*windowSize, context.canvas.width-firstPixel.x),
+                Math.min(2*windowSize, context.canvas.height-firstPixel.y))
         };
     },
     getLinePixels: function(context, coordStart, coordEnd) {
