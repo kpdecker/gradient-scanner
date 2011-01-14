@@ -3,7 +3,7 @@
  * See LICENSE for license information
  */
 $(document).ready(function() {
-    const SNAP_TO_ANGLE = Math.PI/24;
+    const SNAP_TO_PX = 10;
 
     var canvas = $("#imageDisplay"),
         canvasOffset = canvas.offset(),
@@ -41,10 +41,9 @@ $(document).ready(function() {
             dragEnd = {x: event.pageX-canvasOffset.left, y: event.pageY-canvasOffset.top};
 
             // Check for snapto
-            var angle = LineUtils.slopeInRads(dragStart, dragEnd);
-            if (Math.abs(angle) < SNAP_TO_ANGLE || Math.abs(Math.PI-angle) < SNAP_TO_ANGLE) {
+            if (Math.abs(dragEnd.y-dragStart.y) < SNAP_TO_PX) {
                 dragEnd.y = dragStart.y;
-            } else if (Math.abs(Math.PI/2-angle) < SNAP_TO_ANGLE || Math.abs(3*Math.PI/2-angle) < SNAP_TO_ANGLE) {
+            } else if (Math.abs(dragEnd.x-dragStart.x) < SNAP_TO_PX) {
                 dragEnd.x = dragStart.x;
             }
 
@@ -59,7 +58,6 @@ $(document).ready(function() {
                 + " deltaX: " + (dragEnd.x-dragStart.x)
                 + " deltaY: "+ (dragEnd.y-dragStart.y)
                 + " m: " + (dragEnd.y-dragStart.y)/(dragEnd.x-dragStart.x)
-                + " angle: " + angle
             );
 
             // Collect the line data while the user is dragging
