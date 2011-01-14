@@ -2,7 +2,12 @@
  * Copyright (c) 2011 Kevin Decker (http://www.incaseofstairs.com/)
  * See LICENSE for license information
  */
-var ImageDataUtils = {
+var ImageDataUtils;
+
+(function() {
+const DEFAULT_SNAP_SCAN_RANGE = 5;
+
+ImageDataUtils = {
     getCoords: function(offset, imageData) {
         var binWidth = imageData.width * 4;
         return {
@@ -60,3 +65,4 @@ var ImageDataUtils = {
         return canvas;
     },
 };
+})();
