@@ -5,7 +5,17 @@
 var ImageDataUtils;
 
 (function() {
-const DEFAULT_SNAP_SCAN_RANGE = 5;
+const DEFAULT_SNAP_SCAN_RANGE = 10;
+
+function sign(a, b) {
+    return (a > b) ? 1 : (a < b) ? -1 : 0;
+}
+
+function getPixelIntensity(coord, imageData) {
+    var testOffset = ImageDataUtils.getOffset(coord, imageData),
+        data = imageData.data;
+    return data[testOffset]+data[testOffset+1]+data[testOffset+2]+data[testOffset+3];
+}
 
 ImageDataUtils = {
     getCoords: function(offset, imageData) {
@@ -61,6 +71,50 @@ ImageDataUtils = {
         });
 
         return line;
+    },
+    getInitialSnapToTarget: function(edgeContext, coordStart, scanRange) {
+        // Load the window we are concerned with right now
+        var snapWindow = ImageDataUtils.getWindow(edgeContext, coordStart, scanRange || DEFAULT_SNAP_SCAN_RANGE),
+            focusPixel = snapWindow.focusPixel,
+            imageData = snapWindow.imageData,
+            data = snapWindow.imageData.data,
+            endOffset = ImageDataUtils.getOffset(focusPixel, snapWindow.imageData);
+
+        // Setup our data tracker
+        var maximum = focusPixel;
+        maximum.distance = 0;
+        maximum.intensity = getPixelIntensity(maximum, imageData);
+
+        function checkPixel(coord) {
+            var intensity = getPixelIntensity(coord, imageData);
+
+            if (intensity > 256+128) {
+                coord.distance = Math.max(Math.abs(coord.x-focusPixel.x), Math.abs(coord.y-focusPixel.y));
+                coord.intensity = intensity;
+                console.error("checkPixel: " + JSON.stringify(maximum) + " " + JSON.stringify(coord));
+                if ((coord.distance-maximum.distance || maximum.intensity-coord.intensity) > 0) {
+                    maximum = coord;
+                }
+            }
+        }
+
+        // Scan the window for any pixels that are dratically different
+        var y = imageData.height;
+        while (y--) {
+            // Intensity here should somehow be a delta to find edges that are against transparent sections (or the edge finder needs to start examining transparency)
+            checkPixel({x: focusPixel.x, y: y});
+        }
+
+        var x = imageData.width;
+        while (x--) {
+            checkPixel({x: x, y: focusPixel.y});
+        }
+
+        // Move the return one pixel further along the path
+        maximum.x = maximum.x+sign(maximum.x, focusPixel.x)+snapWindow.firstPixel.x;
+        maximum.y = maximum.y+sign(maximum.y, focusPixel.y)+snapWindow.firstPixel.y;
+
+        return maximum;
     },
     createCanvasFromImageData: function(imageData) {
         var canvas = document.createElement("canvas");
