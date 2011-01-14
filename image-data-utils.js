@@ -11,6 +11,15 @@ function sign(a, b) {
     return (a > b) ? 1 : (a < b) ? -1 : 0;
 }
 
+function getPixelDelta(coord, endOffset, imageData) {
+    var testOffset = ImageDataUtils.getOffset(coord, imageData),
+        data = imageData.data;
+
+    return Math.abs(data[endOffset]-data[testOffset])
+            + Math.abs(data[endOffset+1]-data[testOffset+1])
+            + Math.abs(data[endOffset+2]-data[testOffset+2])
+            + Math.abs(data[endOffset+3]-data[testOffset+3]);
+}
 function getPixelIntensity(coord, imageData) {
     var testOffset = ImageDataUtils.getOffset(coord, imageData),
         data = imageData.data;
@@ -117,6 +126,45 @@ ImageDataUtils = {
         // Move the return one pixel further along the path
         maximum.x = maximum.x+sign(maximum.x, focusPixel.x)+snapWindow.firstPixel.x;
         maximum.y = maximum.y+sign(maximum.y, focusPixel.y)+snapWindow.firstPixel.y;
+
+        return maximum;
+    },
+    getSnapToTarget: function(edgeContext, coordStart, coordEnd, scanRange) {
+        // Load the window we are concerned with right now
+        var snapWindow = ImageDataUtils.getWindow(edgeContext, coordEnd, scanRange || DEFAULT_SNAP_SCAN_RANGE),
+            imageData = snapWindow.imageData,
+            data = imageData.data,
+            endOffset = ImageDataUtils.getOffset(snapWindow.focusPixel, imageData),
+
+            angle = LineUtils.slopeInRads(coordStart, coordEnd),
+            shiftedStart = {x: coordStart.x-snapWindow.firstPixel.x, y: coordStart.y-snapWindow.firstPixel.y};
+
+        var maximum = snapWindow.focusPixel;
+        maximum.slopeDelta = 0;
+        maximum.distance = LineUtils.distance(shiftedStart, maximum);
+        maximum.delta = 0;
+
+        // Scan the window for any pixels that are dratically different
+        var y = imageData.height;
+        while (y--) {
+            var x = imageData.width;
+            while (x--) {
+                var coord = {x: x, y: y},
+                    delta = getPixelDelta(coord, endOffset, imageData);
+
+                if (delta > 128) {
+                    coord.distance = LineUtils.distance(shiftedStart, coord);
+                    coord.delta = delta;
+                    coord.slopeDelta = Math.abs(LineUtils.slopeInRads(shiftedStart, coord)-angle);
+                    if ((maximum.slopeDelta-coord.slopeDelta || coord.delta-maximum.delta || coord.distance-maximum.distance) > 0) {
+                        maximum = coord;
+                    }
+                }
+            }
+        }
+
+        maximum.x += snapWindow.firstPixel.x;
+        maximum.y += snapWindow.firstPixel.y;
 
         return maximum;
     },
