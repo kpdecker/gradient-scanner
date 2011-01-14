@@ -62,6 +62,9 @@ $(document).ready(function() {
 
             // Collect the line data while the user is dragging
             imageData = ImageDataUtils.getLinePixels(context, dragStart, dragEnd);
+            if (!imageData) {
+                return;
+            }
 
             // Display the line preview
             var stretcher = ImageDataUtils.createCanvasFromImageData(imageData);
