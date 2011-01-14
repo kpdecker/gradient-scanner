@@ -14,6 +14,13 @@ $(document).ready(function() {
 
     $.template("colorStopTemplate", "<div class=\"colorStop\"> <div class=\"colorPreview\" style=\"background-color: ${colorCss}\"/>${position} ${colorCss}</div>");
 
+    // TODO : Replace this with an actual loader once we are at that point
+    var edgeContext;
+    $("#edgeDebug").load(function() {
+        var loadOptions = {};
+        $(this).pixastic("edges", loadOptions);
+    });
+
     var dragStart, dragEnd, imageData, colorStops;
 
     canvas.parent().mousedown(function(event) {

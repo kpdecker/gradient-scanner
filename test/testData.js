@@ -32,6 +32,8 @@ $(document).ready(function() {
     var img = document.createElement("img");
     $(img).load(function() {
         context.drawImage(img, 100, 100);
+
+        $("#edgeDebug").attr("src", canvas.toDataURL());
     });
 
     img.src = "test/css-gradient-dropdown-menu.gif";
