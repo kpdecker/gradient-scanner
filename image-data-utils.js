@@ -20,11 +20,6 @@ function getPixelDelta(coord, endOffset, imageData) {
             + Math.abs(data[endOffset+2]-data[testOffset+2])
             + Math.abs(data[endOffset+3]-data[testOffset+3]);
 }
-function getPixelIntensity(coord, imageData) {
-    var testOffset = ImageDataUtils.getOffset(coord, imageData),
-        data = imageData.data;
-    return data[testOffset]+data[testOffset+1]+data[testOffset+2]+data[testOffset+3];
-}
 
 ImageDataUtils = {
     getCoords: function(offset, imageData) {
@@ -95,17 +90,16 @@ ImageDataUtils = {
 
         // Setup our data tracker
         var maximum = focusPixel;
-        maximum.distance = 0;
-        maximum.intensity = getPixelIntensity(maximum, imageData);
+        maximum.distance = Infinity;
+        maximum.delta = 0;
 
         function checkPixel(coord) {
-            var intensity = getPixelIntensity(coord, imageData);
+            var delta = getPixelDelta(coord, endOffset, imageData);
 
-            if (intensity > 256+128) {
+            if (delta > 128) {
                 coord.distance = Math.max(Math.abs(coord.x-focusPixel.x), Math.abs(coord.y-focusPixel.y));
-                coord.intensity = intensity;
-                console.error("checkPixel: " + JSON.stringify(maximum) + " " + JSON.stringify(coord));
-                if ((coord.distance-maximum.distance || maximum.intensity-coord.intensity) > 0) {
+                coord.delta = delta;
+                if (coord.distance && (maximum.distance-coord.distance || coord.delta-maximum.delta) > 0) {
                     maximum = coord;
                 }
             }
@@ -114,7 +108,6 @@ ImageDataUtils = {
         // Scan the window for any pixels that are dratically different
         var y = imageData.height;
         while (y--) {
-            // Intensity here should somehow be a delta to find edges that are against transparent sections (or the edge finder needs to start examining transparency)
             checkPixel({x: focusPixel.x, y: y});
         }
 
@@ -124,8 +117,8 @@ ImageDataUtils = {
         }
 
         // Move the return one pixel further along the path
-        maximum.x = maximum.x+sign(maximum.x, focusPixel.x)+snapWindow.firstPixel.x;
-        maximum.y = maximum.y+sign(maximum.y, focusPixel.y)+snapWindow.firstPixel.y;
+        maximum.x = maximum.x+-1*sign(maximum.x, focusPixel.x)+snapWindow.firstPixel.x;
+        maximum.y = maximum.y+-1*sign(maximum.y, focusPixel.y)+snapWindow.firstPixel.y;
 
         return maximum;
     },
