@@ -5,6 +5,8 @@
 var ColorStops = {};
 
 (function() {
+    const JND = 2.39;
+
     function slopeChanged(oldDirv, newDirv) {
         if (!oldDirv[0] && !oldDirv[1] && !oldDirv[2] && !oldDirv[3]) {
             return false;
@@ -77,15 +79,14 @@ var ColorStops = {};
 
         return Math.sqrt(Math.pow(color2[0]-color1[0], 2)+Math.pow(color2[1]-color1[1], 2)+Math.pow(color2[2]-color1[2], 2));
     }
-    function colorsApproxEqual(color1, color2) {
-        const EPSILON = 256*0.01,
-            JND = 2.39;
+    function colorsApproxEqual(color1, color2, dELimit) {
+        const EPSILON = 256*0.01;
 
         var dE = deltaE(color1, color2);
-        return dE <= JND
+        return dE <= dELimit
             && Math.abs(color1[3]-color2[3]) <= EPSILON;
     }
-    function stopsLinear(prev, cur, next) {
+    function stopsLinear(prev, cur, next, dELimit) {
         var deltaX = next.position-prev.position,
             slope = [
                 (next.color[0]-prev.color[0])/deltaX,
@@ -101,34 +102,35 @@ var ColorStops = {};
                 prev.color[3]+slope[3]*curDeltaX | 0
             ];
 
-        return colorsApproxEqual(cur.color, curEstimate);
+        return colorsApproxEqual(cur.color, curEstimate, dELimit);
     }
-    function cullDuplicates(stops) {
+    function cullDuplicates(stops, dELimit) {
+        dELimit = dELimit || JND;
         if (stops.length < 2) {
             return;
         }
 
         // Special case for the first to remove any repeating sections
-        if (colorsApproxEqual(stops[0].color, stops[1].color)) {
+        if (colorsApproxEqual(stops[0].color, stops[1].color, dELimit)) {
             stops.splice(0, 1);
         }
 
         // Check to see if the current element is on the same line as the previous and next. If so remove.
         var len = stops.length;
         for (var i = 1; i < len-1; i++) {
-            if (stopsLinear(stops[i-1], stops[i], stops[i+1])) {
+            if (stopsLinear(stops[i-1], stops[i], stops[i+1], dELimit)) {
                 stops.splice(i, 1);
                 i--;    len--;
             }
         }
 
         // Another special case for the last to remove any repeating sections
-        if (len >= 2 && colorsApproxEqual(stops[len-2].color, stops[len-1].color)) {
+        if (len >= 2 && colorsApproxEqual(stops[len-2].color, stops[len-1].color, dELimit)) {
             stops.splice(len-1, 1);
         }
     }
 
-    ColorStops.extractColorStops = function(lineData) {
+    ColorStops.extractColorStops = function(lineData, dELimit) {
         var len = lineData.length,
             last = [lineData[0], lineData[1], lineData[2], lineData[3]],
             dirv = [0, 0, 0, 0],
@@ -184,7 +186,7 @@ var ColorStops = {};
             color: last
         });
 
-        cullDuplicates(ret)
+        cullDuplicates(ret, dELimit)
         return ret;
     };
 
