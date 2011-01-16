@@ -101,5 +101,6 @@ $(document).ready(function() {
         colorStops[el.data("stopIndex")].disabled = el.toggleClass("disabled").hasClass("disabled");
 
         $("#gradientPreview").css("background-image", ColorStops.generateCSS(colorStops));
+        $("#stopCount").text("Count: " + colorStops.filter(function(stop) { return !stop.disabled; }).length);
     });
 });
