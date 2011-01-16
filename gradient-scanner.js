@@ -80,19 +80,7 @@ $(document).ready(function() {
                     .css("-webkit-transform", rotate);
         }
     }).mouseup(function(event) {
-        colorStops = ColorStops.extractColorStops(imageData.data);
-
-        colorStops.forEach(function(stop, index) {
-            var stopEl = $.tmpl("colorStopTemplate", {
-                position: stop.position,
-                colorCss: "RGBA(" + stop.color.join(", ") + ")"
-            });
-            stopEl.data("stopIndex", index);
-            colorStopsEl.append(stopEl);
-        });
-        $("#stopCount").text("Count: " + colorStops.length);
-
-        $("#gradientPreview").css("background-image", ColorStops.generateCSS(colorStops));
+        updateGradient();
 
         dragStart = undefined;
     });
