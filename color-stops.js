@@ -105,13 +105,16 @@ var ColorStops = {};
         return colorsApproxEqual(cur.color, curEstimate, dELimit);
     }
     function cullDuplicates(stops, dELimit) {
+        const EDGE_DISTANCE = 0.01;
+
         dELimit = dELimit || JND;
         if (stops.length < 2) {
             return;
         }
 
         // Special case for the first to remove any repeating sections
-        if (stops[1].position-stops[0].position > 0.1 && colorsApproxEqual(stops[0].color, stops[1].color, dELimit)) {
+        if (stops[1].position-stops[0].position > EDGE_DISTANCE
+                && colorsApproxEqual(stops[0].color, stops[1].color, dELimit)) {
             stops.splice(0, 1);
         }
 
@@ -125,7 +128,9 @@ var ColorStops = {};
         }
 
         // Another special case for the last to remove any repeating sections
-        if (len >= 2 && stops[len-1].position-stops[len-2].position > 0.1 && colorsApproxEqual(stops[len-2].color, stops[len-1].color, dELimit)) {
+        if (len >= 2
+                && stops[len-1].position-stops[len-2].position > EDGE_DISTANCE
+                && colorsApproxEqual(stops[len-2].color, stops[len-1].color, dELimit)) {
             stops.splice(len-1, 1);
         }
     }
