@@ -24,12 +24,65 @@ var ColorStops = {};
             ];
     }
 
-    function colorsApproxEqual(color1, color2) {
-        const EPSILON = 256*0.01;
+    function RGBtoXYZ(color) {
+        // Algorithm from http://www.brucelindbloom.com/Eqn_RGB_to_XYZ.html
+        var R = color[0] / 255,
+            G = color[1] / 255,
+            B = color[2] / 255;
 
-        return Math.abs(color1[0]-color2[0]) <= EPSILON
-            && Math.abs(color1[1]-color2[1]) <= EPSILON
-            && Math.abs(color1[2]-color2[2]) <= EPSILON
+        // Inverse Gamma Compounding, using Adobe RGB (1998) color
+        //      http://www.brucelindbloom.com/WorkingSpaceInfo.html#Specifications
+        var r = Math.pow(R, 2.2),
+            g = Math.pow(G, 2.2),
+            b = Math.pow(B, 2.2);
+
+        // Constants here are constructed from the M value for Adobe RGB (1998) defined
+        // here: http://www.brucelindbloom.com/Eqn_RGB_XYZ_Matrix.html
+        return [
+            (0.5767309*r + 0.1855540*b + 0.1881852*g),
+            (0.2973769*r + 0.6273491*b  + 0.0752741*g),
+            (0.0270343*r + 0.0706872*b + 0.9911085*g)
+        ];
+    }
+    function XYZtoLAB(color) {
+        // Algorithm from: http://www.brucelindbloom.com/Eqn_XYZ_to_Lab.html
+        const X_r=0.95047, Y_r=1.00, Z_r=1.08883,
+            EPSILON = 0.008856,
+            KAPPA = 903.3;
+
+        var x = color[0]/X_r,
+            y = color[1]/X_r,
+            z = color[2]/X_r;
+
+        function f_(a) {
+            if (a > EPSILON) {
+                return Math.pow(a, 1/3);
+            } else {
+                return (KAPPA*a+16)/116;
+            }
+        }
+        var f_x = f_(x),
+            f_y = f_(y),
+            f_z = f_(z);
+
+        return [
+            116*f_y-16,
+            500*(f_x-f_z),
+            200*(f_y-f_z)
+        ];
+    }
+    function deltaE(color1, color2) {
+        color1 = XYZtoLAB(RGBtoXYZ(color1));
+        color2 = XYZtoLAB(RGBtoXYZ(color2));
+
+        return Math.sqrt(Math.pow(color2[0]-color1[0], 2)+Math.pow(color2[1]-color1[1], 2)+Math.pow(color2[2]-color1[2], 2));
+    }
+    function colorsApproxEqual(color1, color2) {
+        const EPSILON = 256*0.01,
+            JND = 2.39;
+
+        var dE = deltaE(color1, color2);
+        return dE <= JND
             && Math.abs(color1[3]-color2[3]) <= EPSILON;
     }
     function stopsLinear(prev, cur, next) {
