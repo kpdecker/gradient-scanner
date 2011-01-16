@@ -80,11 +80,11 @@ var ColorStops = {};
         return Math.sqrt(Math.pow(color2[0]-color1[0], 2)+Math.pow(color2[1]-color1[1], 2)+Math.pow(color2[2]-color1[2], 2));
     }
     function colorsApproxEqual(color1, color2, dELimit) {
-        const EPSILON = 256*0.01;
+        const ALPHA_EPSILON = 256*0.1;
 
         var dE = deltaE(color1, color2);
         return dE <= dELimit
-            && Math.abs(color1[3]-color2[3]) <= EPSILON;
+            && Math.abs(color1[3]-color2[3]) <= ALPHA_EPSILON;
     }
     function stopsLinear(prev, cur, next, dELimit) {
         var deltaX = next.position-prev.position,
