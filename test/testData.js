@@ -45,8 +45,21 @@ $(document).ready(function() {
         mousedown.pageX = 189;
         mousedown.pageY = 503;
 
+        mousedown.pageX = 232;
+        mousedown.pageY = 81;
+
         mousedown.pageX = 366;
         mousedown.pageY = 100;
+/*
+        mousedown.pageX = 225;
+        mousedown.pageY = 73;
+/*
+        mousedown.pageX = 586;
+        mousedown.pageY = 100;
+
+        mousedown.pageX = 386;
+        mousedown.pageY = 406;
+*/
         mousedown.pageX += offset.left;
         mousedown.pageY += offset.top;
 
@@ -54,8 +67,21 @@ $(document).ready(function() {
         mousemove.pageX = 189;
         mousemove.pageY = 142;
 
+        mousemove.pageX = 79;
+        mousemove.pageY = 81;
+
         mousemove.pageX = 366;
         mousemove.pageY = 600;
+/*
+        mousemove.pageX = 67;
+        mousemove.pageY = 73;
+/*
+        mousemove.pageX = 586;
+        mousemove.pageY = 600;
+
+        mousemove.pageX = 224;
+        mousemove.pageY = 257;
+*/
         mousemove.pageX += offset.left;
         mousemove.pageY += offset.top;
 
