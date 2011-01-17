@@ -39,20 +39,28 @@ $(document).ready(function() {
     img.src = "test/css-gradient-dropdown-menu.gif";
 
     setTimeout(function() {
+        var offset = $("#imageDisplay").offset();
+
         var mousedown = jQuery.Event("mousedown");
         mousedown.pageX = 189;
         mousedown.pageY = 503;
+
+        mousedown.pageX = 366;
+        mousedown.pageY = 100;
+        mousedown.pageX += offset.left;
+        mousedown.pageY += offset.top;
 
         var mousemove = jQuery.Event("mousemove");
         mousemove.pageX = 189;
         mousemove.pageY = 142;
 
-        var mouseup = jQuery.Event("mouseup");
-        mouseup.pageX = 189;
-        mouseup.pageY = 142;
+        mousemove.pageX = 366;
+        mousemove.pageY = 600;
+        mousemove.pageX += offset.left;
+        mousemove.pageY += offset.top;
 
         $(canvas).trigger(mousedown)
                 .trigger(mousemove)
-                .trigger(mouseup);
+                .trigger(jQuery.Event("mouseup"));
     }, 500);
 });
