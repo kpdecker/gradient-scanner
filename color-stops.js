@@ -7,26 +7,26 @@ var ColorStops = {};
 (function() {
     ColorStops.JND = 2.39;
 
-    function slopeChanged(oldDirv, newDirv) {
-        if (!oldDirv[0] && !oldDirv[1] && !oldDirv[2] && !oldDirv[3]) {
+    function slopeChanged(oldDeriv, newDeriv) {
+        if (!oldDeriv[0] && !oldDeriv[1] && !oldDeriv[2] && !oldDeriv[3]) {
             return false;
         }
 
-        if (!newDirv[0] && !newDirv[1] && !newDirv[2] && !newDirv[3]) {
+        if (!newDeriv[0] && !newDeriv[1] && !newDeriv[2] && !newDeriv[3]) {
             return true;
         }
 
-        return (newDirv[0] && (oldDirv[0]<0 !== newDirv[0]<0))
-            || (newDirv[1] && (oldDirv[1]<0 !== newDirv[1]<0))
-            || (newDirv[2] && (oldDirv[2]<0 !== newDirv[2]<0))
-            || (newDirv[3] && (oldDirv[3]<0 !== newDirv[3]<0));
+        return (newDeriv[0] && (oldDeriv[0]<0 !== newDeriv[0]<0))
+            || (newDeriv[1] && (oldDeriv[1]<0 !== newDeriv[1]<0))
+            || (newDeriv[2] && (oldDeriv[2]<0 !== newDeriv[2]<0))
+            || (newDeriv[3] && (oldDeriv[3]<0 !== newDeriv[3]<0));
     }
-    function updateDirv(oldDirv, newDirv) {
+    function updateDeriv(oldDeriv, newDeriv) {
         return [
-                newDirv[0] || oldDirv[0],
-                newDirv[1] || oldDirv[1],
-                newDirv[2] || oldDirv[2],
-                newDirv[3] || oldDirv[3],
+                newDeriv[0] || oldDeriv[0],
+                newDeriv[1] || oldDeriv[1],
+                newDeriv[2] || oldDeriv[2],
+                newDeriv[3] || oldDeriv[3],
             ];
     }
 
@@ -142,8 +142,8 @@ var ColorStops = {};
     ColorStops.extractColorStops = function(lineData, dELimit) {
         var len = lineData.length,
             last = [lineData[0], lineData[1], lineData[2], lineData[3]],
-            dirv = [0, 0, 0, 0],
-            secDirv = [0, 0, 0, 0],
+            deriv = [0, 0, 0, 0],
+            secDeriv = [0, 0, 0, 0],
             ret = [];
 
         // We always have a color stop on the first pixel
@@ -158,9 +158,9 @@ var ColorStops = {};
             runCount = 0;
         for (var i = 4; i < len; i += 4) {
             var cur = [lineData[i], lineData[i+1], lineData[i+2], lineData[i+3]],
-                newDirv = [cur[0]-last[0], cur[1]-last[1], cur[2]-last[2], cur[3]-last[3]],
-                newSecDirv = [newDirv[0]-dirv[0], newDirv[1]-dirv[1], newDirv[2]-dirv[2], newDirv[3]-dirv[3]],
-                delta = Math.abs(newDirv[0]) + Math.abs(newDirv[1]) + Math.abs(newDirv[2]) + Math.abs(newDirv[3]);
+                newDeriv = [cur[0]-last[0], cur[1]-last[1], cur[2]-last[2], cur[3]-last[3]],
+                newSecDeriv = [newDeriv[0]-deriv[0], newDeriv[1]-deriv[1], newDeriv[2]-deriv[2], newDeriv[3]-deriv[3]],
+                delta = Math.abs(newDeriv[0]) + Math.abs(newDeriv[1]) + Math.abs(newDeriv[2]) + Math.abs(newDeriv[3]);
 
             // Check to see if this is a drastic change in derivative from the previous trend
             var prevAverage = totalDelta/runCount,
@@ -182,18 +182,18 @@ var ColorStops = {};
             }
 
             // Check for a zero crossing in the first or second dervative
-            if (slopeChanged(dirv, newDirv) || slopeChanged(secDirv, newSecDirv)) {
+            if (slopeChanged(deriv, newDeriv) || slopeChanged(secDeriv, newSecDeriv)) {
                 ret.push({
                     position: i / len,
                     color: cur
                 });
-                dirv = newDirv;
-                secDirv = newSecDirv;
+                deriv = newDeriv;
+                secDeriv = newSecDeriv;
             }
 
             last = cur;
-            dirv = updateDirv(dirv, newDirv);
-            secDirv = updateDirv(secDirv, newSecDirv);
+            deriv = updateDeriv(deriv, newDeriv);
+            secDeriv = updateDeriv(secDeriv, newSecDeriv);
         }
 
         ret.push({
