@@ -152,11 +152,8 @@ var ColorStops = {};
             color: last
         });
 
-        // Scan through the remaining pixels looking for points that the derivative components cross the
-        // x-axis.
-        // TODO : Handle outliers where the slope remains in the same direction, but the jump is large enough to break
-        //          the interpolation.
-        // TODO : Handle cases where a color stop forces a quicker or slower progression (but does not trigger either of the other cases)
+        // Scan through the remaining pixels looking for any of our possible triggers, err on the side of false
+        // positives (which may be culled in the next step)
         var totalDelta = 0,
             runCount = 0;
         for (var i = 4; i < len; i += 4) {
