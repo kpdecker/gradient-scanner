@@ -5,7 +5,7 @@
 var ColorStops = {};
 
 (function() {
-    const JND = 2.39;
+    ColorStops.JND = 2.39;
 
     function slopeChanged(oldDirv, newDirv) {
         if (!oldDirv[0] && !oldDirv[1] && !oldDirv[2] && !oldDirv[3]) {
@@ -107,7 +107,7 @@ var ColorStops = {};
     function cullDuplicates(stops, dELimit) {
         const EDGE_DISTANCE = 0.01;
 
-        dELimit = dELimit || JND;
+        dELimit = dELimit || ColorsStops.JND;
         if (stops.length < 2) {
             return;
         }

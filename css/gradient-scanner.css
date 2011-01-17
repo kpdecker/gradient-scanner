@@ -33,6 +33,11 @@
     height: 50px;
 }
 
+.delta-e-slider {
+    margin: 5px 0;
+    width: 600px;
+}
+
 /* Stop List */
 .stops-list {
     padding: 10px;
