@@ -162,7 +162,7 @@ var ColorStops = {};
             // Check to see if this is a drastic change in derivative from the previous trend
             var prevAverage = totalDelta/runCount,
                 deltaVariance = Math.abs(prevAverage-delta);
-            if (runCount && (0.5*prevAverage < deltaVariance || prevAverage*2 < deltaVariance)) {
+            if (runCount && prevAverage < 0.75*deltaVariance) {
                 ret.push({
                     position: i / len,
                     color: last
