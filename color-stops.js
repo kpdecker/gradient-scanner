@@ -171,14 +171,18 @@ var ColorStops = {};
                     position: i / len,
                     color: last
                 });
-                totalDelta = delta;
-                runCount = 1;
+                ret.push({
+                    position: i / len,
+                    color: cur
+                });
+                totalDelta = 0;
+                runCount = 0;
             } else {
                 totalDelta += delta;
                 runCount++;
             }
 
-            if (delta > 50 || slopeChanged(dirv, newDirv)) {
+            if (slopeChanged(dirv, newDirv)) {
                 ret.push({
                     position: i / len,
                     color: cur
