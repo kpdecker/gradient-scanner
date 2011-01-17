@@ -1,12 +1,11 @@
 # TODO
-- Implement the line drawing UI
-- Implement the gradient scanner after reading the line
 - Implement a basic gradient editor UI
 - Basic layout
 - CSS generation
-    - Current browser
     - Cross browser
-- Check into improved line extraction algorithms (to better handle subpixel operations)
 - Implement the help UI
-- Use an edge detector to implement snapto on edges of elements
 - Investigate the effects that blurring the image can have on the final result
+- Proxy for browsers that do not support File API
+- Preview UI
+- Radial support
+- Repeating support
