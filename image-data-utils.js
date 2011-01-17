@@ -64,18 +64,26 @@ ImageDataUtils = {
             lineData = line.data;
 
         LineUtils.walkLine(coordStart, coordEnd, function(t, coords) {
-            // TODO : Examine what sort of interpolation or averaging we want to do if we have a non-integer component
-            // Cast to ints
-            coords.x |= 0;
-            coords.y |= 0;
+            var firstCoord = {x: Math.floor(coords.x), y: Math.floor(coords.y)},
+                nextCoord = {x: Math.floor(coords.x), y: Math.ceil(coords.y)};
 
-            var offset = ImageDataUtils.getOffset(coords, image);
+            var firstOffset = ImageDataUtils.getOffset(firstCoord, image),
+                nextOffset = ImageDataUtils.getOffset(nextCoord, image);
+
+            var xPercentage = 1-(coords.x-firstCoord.x),
+                yPercentage = 1-(coords.y-firstCoord.y);
+            function calcComponent(offset1, offset2) {
+                return imageData[offset1 ]*xPercentage*yPercentage
+                    + (imageData[offset1+4]||0)*(1-xPercentage)*yPercentage
+                    + (imageData[offset2  ]||0)*xPercentage*(1-yPercentage)
+                    + (imageData[offset2+4]||0)*(1-xPercentage)*(1-yPercentage);
+            }
 
             var lineOffset = t*4;
-            lineData[lineOffset]   = imageData[offset];
-            lineData[lineOffset+1] = imageData[offset+1];
-            lineData[lineOffset+2] = imageData[offset+2];
-            lineData[lineOffset+3] = imageData[offset+3];
+            lineData[lineOffset]   = calcComponent(firstOffset,   nextOffset);
+            lineData[lineOffset+1] = calcComponent(firstOffset+1, nextOffset+1);
+            lineData[lineOffset+2] = calcComponent(firstOffset+2, nextOffset+2);
+            lineData[lineOffset+3] = calcComponent(firstOffset+3, nextOffset+3);
         });
 
         return line;
