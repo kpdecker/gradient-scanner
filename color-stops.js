@@ -12,6 +12,10 @@ var ColorStops = {};
             return false;
         }
 
+        if (!newDirv[0] && !newDirv[1] && !newDirv[2] && !newDirv[3]) {
+            return true;
+        }
+
         return (newDirv[0] && (oldDirv[0]<0 !== newDirv[0]<0))
             || (newDirv[1] && (oldDirv[1]<0 !== newDirv[1]<0))
             || (newDirv[2] && (oldDirv[2]<0 !== newDirv[2]<0))
