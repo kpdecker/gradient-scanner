@@ -143,6 +143,7 @@ var ColorStops = {};
         var len = lineData.length,
             last = [lineData[0], lineData[1], lineData[2], lineData[3]],
             dirv = [0, 0, 0, 0],
+            secDirv = [0, 0, 0, 0],
             ret = [];
 
         // We always have a color stop on the first pixel
@@ -161,6 +162,7 @@ var ColorStops = {};
         for (var i = 4; i < len; i += 4) {
             var cur = [lineData[i], lineData[i+1], lineData[i+2], lineData[i+3]],
                 newDirv = [cur[0]-last[0], cur[1]-last[1], cur[2]-last[2], cur[3]-last[3]],
+                newSecDirv = [newDirv[0]-dirv[0], newDirv[1]-dirv[1], newDirv[2]-dirv[2], newDirv[3]-dirv[3]],
                 delta = Math.abs(newDirv[0]) + Math.abs(newDirv[1]) + Math.abs(newDirv[2]) + Math.abs(newDirv[3]);
 
             // Check to see if this is a drastic change in derivative from the previous trend
@@ -182,16 +184,19 @@ var ColorStops = {};
                 runCount++;
             }
 
-            if (slopeChanged(dirv, newDirv)) {
+            // Check for a zero crossing in the first or second dervative
+            if (slopeChanged(dirv, newDirv) || slopeChanged(secDirv, newSecDirv)) {
                 ret.push({
                     position: i / len,
                     color: cur
                 });
                 dirv = newDirv;
+                secDirv = newSecDirv;
             }
 
             last = cur;
             dirv = updateDirv(dirv, newDirv);
+            secDirv = updateDirv(secDirv, newSecDirv);
         }
 
         ret.push({
