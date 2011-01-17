@@ -33,7 +33,7 @@ $(document).ready(function() {
     $(img).load(function() {
         context.drawImage(img, 100, 100);
 
-        $("#edgeDebug").attr("src", canvas.toDataURL());
+        edgeContext = ImageDataUtils.getEdgeContext(canvas);
     });
 
     img.src = "test/css-gradient-dropdown-menu.gif";

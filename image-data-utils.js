@@ -161,6 +161,18 @@ ImageDataUtils = {
 
         return maximum;
     },
+    getEdgeContext: function(el) {
+        var loadOptions = {};
+        Pixastic.process(ImageDataUtils.cloneCanvas(el), "edges", loadOptions);
+        return loadOptions.resultCanvas.getContext("2d");
+    },
+    cloneCanvas: function(el) {
+        var clone = document.createElement("canvas");
+        clone.width = el.naturalWidth || el.width;
+        clone.height = el.naturalHeight || el.height;
+        clone.getContext("2d").drawImage(el, 0, 0);
+        return clone;
+    },
     createCanvasFromImageData: function(imageData) {
         var canvas = document.createElement("canvas");
         canvas.setAttribute("width", imageData.width);

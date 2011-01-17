@@ -2,6 +2,7 @@
  * Copyright (c) 2011 Kevin Decker (http://www.incaseofstairs.com/)
  * See LICENSE for license information
  */
+var edgeContext;        // Global for now, move to ready scope once the file loader is complete
 $(document).ready(function() {
     const SNAP_TO_PX = 10;
 
@@ -14,14 +15,8 @@ $(document).ready(function() {
 
     $.template("colorStopTemplate", "<div class=\"colorStop\"> <div class=\"colorPreview\" style=\"background-color: ${colorCss}\"/>${position} ${colorCss}</div>");
 
-    var dragStart, dragEnd, imageData, colorStops, edgeContext, deltaE = ColorStops.JND;
 
-    // TODO : Replace this with an actual loader once we are at that point
-    $("#edgeDebug").load(function() {
-        var loadOptions = {};
-        $(this).pixastic("edges", loadOptions);
-        edgeContext = loadOptions.resultCanvas.getContext("2d");
-    });
+    var dragStart, dragEnd, imageData, colorStops, deltaE = ColorStops.JND;
 
     function updateGradient() {
         colorStops = ColorStops.extractColorStops(imageData.data, deltaE);
