@@ -212,13 +212,66 @@ var ColorStops = {};
         return ret;
     };
 
-    ColorStops.generateCSS = function(colorStops) {
-        var stopCSS = colorStops.filter(function(stop) {
-            return !stop.disabled;
-        }).map(function(stop) {
-            return "color-stop(" + stop.position + ", RGBA(" + stop.color.join(", ") + "))";
-        }).join(", ");
+    ColorStops.getColorValue = function(color) {
+        if (color[3] === 255) {
+            return "rgb(" + color[0] + ", " + color[1] + ", " + color[2] + ")";
+        } else {
+            return "rgba(" + color.join(", ") + ")";
+        }
+    };
 
-        return "-webkit-gradient(linear, left top, right top, " + stopCSS + ")";
+    var cssGenerators = {
+        webkitOld: function(type, coords, colorStops) {
+            var stopCSS = colorStops.map(function(stop) {
+                if (!stop.position) {
+                    return "from(" + ColorStops.getColorValue(stop.color) + ")";
+                } else if (stop.position === 1.0) {
+                    return "to(" + ColorStops.getColorValue(stop.color) + ")";
+                } else {
+                    return "color-stop(" + stop.position + ", " + ColorStops.getColorValue(stop.color) + ")";
+                }
+            }).join(", ");
+
+            return "-webkit-gradient(" + type + ", " + coords.join(", ") + ", " + stopCSS + ")";
+        },
+        mozilla: function(type, coords, colorStops) {
+            // TODO : Optimize this for equally spaced cases
+            var stopCSS = colorStops.map(function(stop) {
+                return ColorStops.getColorValue(stop.color) + " " + Math.floor(stop.position * 1000)/10 + "%";
+            }).join(", ");
+
+            if (type === "linear") {
+                // TODO : Figure out what the angle is from the two provided coordinates
+                return "-moz-linear-gradient(" + coords[0] + ", " + stopCSS + ")";
+            } else if (type === "radial") {
+                // TODO : Lets do this
+            }
+        }
+    };
+
+    ColorStops.generateCSS = function(colorStops) {
+        colorStops = colorStops.filter(function(stop) {
+            return !stop.disabled;
+        });
+
+        // TODO : Parameterize this
+        var type = "linear",
+            coords = ["left center", "right center"];
+
+        var ret = [];
+        for (var name in cssGenerators) {
+            if (cssGenerators.hasOwnProperty(name)) {
+                ret.push(cssGenerators[name](type, coords, colorStops));
+            }
+        }
+
+        return ret;
+    };
+    ColorStops.applyBackground = function(el, colorStops) {
+        var css = ColorStops.generateCSS(colorStops),
+            len = css.length;
+        for (var i = 0; i < len; i++) {
+            el.css("background-image", css[i]);
+        }
     };
 })();
