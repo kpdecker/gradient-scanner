@@ -201,7 +201,14 @@ var ColorStops = {};
             color: last
         });
 
-        cullDuplicates(ret, dELimit)
+        // Clear out any stops that do not provide additional data (per configurable dELimit)
+        cullDuplicates(ret, dELimit);
+
+        // Make the position values nice and clean
+        ret.forEach(function(stop) {
+            stop.position = Math.floor(stop.position*1000)/1000;
+        });
+
         return ret;
     };
 
