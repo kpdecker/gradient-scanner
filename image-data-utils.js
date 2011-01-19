@@ -50,7 +50,11 @@ ImageDataUtils = {
     getLinePixels: function(context, coordStart, coordEnd) {
         // Extract the rectangle that contains our data
         var containingRect = LineUtils.containingRect(coordStart, coordEnd),
-            image = context.getImageData(containingRect.x, containingRect.y, containingRect.width+1, containingRect.height+1),
+            image = context.getImageData(
+                containingRect.x,
+                containingRect.y,
+                Math.min(containingRect.width+1, context.canvas.width-containingRect.x),     // Need to limit to image coords for Mozilla
+                Math.min(containingRect.height+1, context.canvas.height-containingRect.y)),
             imageData = image.data;
 
         // Determine the properties of our line
