@@ -18,6 +18,13 @@ $(document).ready(function() {
 
     var dragStart, dragEnd, imageData, colorStops, deltaE = ColorStops.JND;
 
+    function outputGradient() {
+        var css = ColorStops.generateCSS(colorStops);
+
+        ColorStops.applyBackground($("#gradientPreview"), colorStops);
+        $("#generatedCss")[0].textContent = "background-image: " + css.join(";\nbackground-image: ");
+        $("#stopCount").text("Count: " + colorStops.filter(function(stop) { return !stop.disabled; }).length + " deltaE: " + deltaE);
+    }
     function updateGradient() {
         colorStops = ColorStops.extractColorStops(imageData.data, deltaE);
 
@@ -29,9 +36,8 @@ $(document).ready(function() {
             stopEl.data("stopIndex", index);
             colorStopsEl.append(stopEl);
         });
-        $("#stopCount").text("Count: " + colorStops.length + " deltaE: " + deltaE);
 
-        $("#gradientPreview").css("background-image", ColorStops.generateCSS(colorStops));
+        outputGradient();
     }
 
     $(".delta-e-slider").slider({
@@ -112,7 +118,6 @@ $(document).ready(function() {
         var el = $(this);
         colorStops[el.data("stopIndex")].disabled = el.toggleClass("disabled").hasClass("disabled");
 
-        $("#gradientPreview").css("background-image", ColorStops.generateCSS(colorStops));
-        $("#stopCount").text("Count: " + colorStops.filter(function(stop) { return !stop.disabled; }).length + " deltaE: " + deltaE);
+        outputGradient();
     });
 });
