@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2011 Kevin Decker (http://www.incaseofstairs.com/)
+ * See LICENSE for license information
+ */
 var LineUtils = {
     containingRect: function(start, end) {
         var topLeft = {x: Math.min(start.x, end.x), y: Math.min(start.y, end.y)},
