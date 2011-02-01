@@ -22,6 +22,13 @@ function checkUnit(unit, value) {
         return false;
     }
 }
+function combineUnit(magnitude, unit) {
+    if (!magnitude || unit === "px") {
+        return magnitude;
+    } else {
+        return magnitude + unit;
+    }
+}
 
 LineUtils = {
     /**
@@ -29,7 +36,27 @@ LineUtils = {
      */
     getUnit: getUnit,
 
+    /**
+     * Determines the minimum rectangle that will cover the line segment with the given endpoints and optionally width
+     */
     containingRect: function(start, end, width) {
+        var unit = 0;
+        unit = checkUnit(unit, start.x);
+        unit = checkUnit(unit, start.y);
+        unit = checkUnit(unit, end.x);
+        unit = checkUnit(unit, end.y);
+        if (width) {
+            unit = checkUnit(unit, width);
+        }
+        if (unit === false) {
+            return NaN;
+        }
+
+        // Remove any units, we'll restore them later
+        start = {x: parseInt(start.x), y: parseInt(start.y)};
+        end = {x: parseInt(end.x), y: parseInt(end.y)};
+        width = parseInt(width);
+
         var topLeft = {x: Math.min(start.x, end.x), y: Math.min(start.y, end.y)},
             bottomRight = {x: Math.max(start.x, end.x), y: Math.max(start.y, end.y)};
 
@@ -44,10 +71,10 @@ LineUtils = {
         }
 
         return {
-            x: topLeft.x,
-            y: topLeft.y,
-            width: Math.max(bottomRight.x-topLeft.x, 1),
-            height: Math.max(bottomRight.y-topLeft.y, 1)
+            x: combineUnit(topLeft.x, unit),
+            y: combineUnit(topLeft.y, unit),
+            width: combineUnit(Math.max(bottomRight.x-topLeft.x, 1), unit),
+            height: combineUnit(Math.max(bottomRight.y-topLeft.y, 1), unit)
         };
     },
 
