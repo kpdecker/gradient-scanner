@@ -4,3 +4,6 @@
 [submodule "lib/pixastic"]
 	path = lib/pixastic
 	url = git@github.com:kpdecker/pixastic.git
+[submodule "test/qunit"]
+	path = test/qunit
+	url = https://github.com/jquery/qunit.git
