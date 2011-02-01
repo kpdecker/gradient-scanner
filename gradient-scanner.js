@@ -13,8 +13,12 @@ $(document).ready(function() {
         linePreview = document.getElementById("linePreview"),
         colorStopsEl = $("#colorStops");
 
-    $.template("colorStopTemplate", "<div class=\"colorStop\"> <div class=\"colorPreview\" style=\"background-color: ${colorCss}\"/>${position} ${colorCss}</div>");
-
+    $.template(
+        "colorStopTemplate",
+        "<div class=\"color-stop\">"
+            + "<div class=\"color-preview\" style=\"background-color: ${colorCss}\"/>"
+            + "${colorCss} ${position}"
+        + "</div>");
 
     var dragStart, dragEnd, imageData, colorStops, deltaE = ColorStops.JND;
 
@@ -114,7 +118,7 @@ $(document).ready(function() {
 
         dragStart = undefined;
     });
-    colorStopsEl.delegate(".colorStop", "click", function(event) {
+    colorStopsEl.delegate(".color-stop", "click", function(event) {
         var el = $(this);
         colorStops[el.data("stopIndex")].disabled = el.toggleClass("disabled").hasClass("disabled");
 

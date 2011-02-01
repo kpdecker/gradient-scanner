@@ -47,14 +47,14 @@
 
     border: 1px solid #333;
 }
-.colorStop {
+.color-stop {
     line-height: 25px;
     padding-bottom: 5px;
 }
-.colorStop.disabled {
+.color-stop.disabled {
     opacity: 0.5;
 }
-.colorPreview {
+.color-preview {
     float: left;
     width: 25px;
     height: 25px;
