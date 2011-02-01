@@ -105,8 +105,7 @@ $(document).ready(function() {
             linePreview.src = stretcher.toDataURL();
 
             // Move the line indicator
-            var slopeRads = LineUtils.slopeInRads(dragStart, dragEnd),
-                distance = LineUtils.distance(dragStart, dragEnd),
+            var distance = LineUtils.distance(dragStart, dragEnd),
                 rotate = "rotate(" + LineUtils.slopeInRads(dragStart, dragEnd) + "rad)";
             $("#lineOverlay").css("width", distance)
                     .css("-moz-transform", rotate)
