@@ -78,6 +78,25 @@ LineUtils = {
         };
     },
 
+    /**
+     * Returns the relative position for a given coord, relative to a specific origin.
+     */
+    relativeCoords: function(coord, origin) {
+        var unit = 0;
+        unit = checkUnit(unit, coord.x);
+        unit = checkUnit(unit, coord.y);
+        unit = checkUnit(unit, origin.x);
+        unit = checkUnit(unit, origin.y);
+        if (unit === false) {
+            return NaN;
+        }
+
+        return {
+            x: combineUnit(parseInt(coord.x)-parseInt(origin.x), unit),
+            y: combineUnit(parseInt(coord.y)-parseInt(origin.y), unit)
+        };
+    },
+
     distance: function(start, end) {
         return Math.sqrt(Math.pow(end.y-start.y,2) + Math.pow(end.x-start.x, 2));
     },

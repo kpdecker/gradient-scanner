@@ -50,6 +50,18 @@ $(document).ready(function(){
         deepEqual(LineUtils.containingRect({x:"1%", y:0}, {x:0, y:"1%"}, 1), NaN, "containingRect({1%,0}, {0,1%}, 1)");
     });
 
+    test("relativeCoords", function() {
+        expect(6);
+        deepEqual(LineUtils.relativeCoords({x:0, y:0}, {x:0, y:0}), {x:0,y:0}, "relativeCoords({0,0}, {0,0})");
+        deepEqual(LineUtils.relativeCoords({x:0, y:0}, {x:1, y:1}), {x:-1,y:-1}, "relativeCoords({0,0}, {1,1})");
+        deepEqual(LineUtils.relativeCoords({x:1, y:1}, {x:0, y:0}), {x:1,y:1}, "relativeCoords({1,1}, {0,0})");
+
+        deepEqual(LineUtils.relativeCoords({x:0, y:0}, {x:"1%", y:"1%"}), {x:"-1%",y:"-1%"}, "relativeCoords({0,0}, {1%,1%})");
+        deepEqual(LineUtils.relativeCoords({x:"1%", y:"1%"}, {x:0, y:0}), {x:"1%",y:"1%"}, "relativeCoords({1%,1%}, {0,0})");
+
+        deepEqual(LineUtils.relativeCoords({x:"1%", y:0}, {x:0, y:1}), NaN, "relativeCoords({1%,0}, {0,1})");
+    });
+
     test("slopeInRads", function() {
         // Testing conditional logic only, assuming that the math is correct
         expect(13);
