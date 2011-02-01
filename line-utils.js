@@ -2,16 +2,26 @@
  * Copyright (c) 2011 Kevin Decker (http://www.incaseofstairs.com/)
  * See LICENSE for license information
  */
-var LineUtils = {
+var LineUtils;
+
+(function() {
+
+function getUnit(value) {
+    if (parseInt(value) == 0) {
+        return 0;
+    }
+    return /\d+(.*)/.exec(value)[1] || "px";
+}
+function checkUnit(unit, value) {
+    var newUnit = getUnit(value);
+    return !newUnit || unit === newUnit;
+}
+
+LineUtils = {
     /**
      * Retrieves the unit from a given value (defaulting to pixels if undefined)
      */
-    getUnit: function(value) {
-        if (parseInt(value) == 0) {
-            return 0;
-        }
-        return /\d+(.*)/.exec(value)[1] || "px";
-    },
+    getUnit: getUnit,
 
     containingRect: function(start, end, width) {
         var topLeft = {x: Math.min(start.x, end.x), y: Math.min(start.y, end.y)},
@@ -34,6 +44,7 @@ var LineUtils = {
             height: Math.max(bottomRight.y-topLeft.y, 1)
         };
     },
+
     distance: function(start, end) {
         return Math.sqrt(Math.pow(end.y-start.y,2) + Math.pow(end.x-start.x, 2));
     },
@@ -42,14 +53,9 @@ var LineUtils = {
      * Range: [0, 2PI]
      */
     slopeInRads: function(start, end) {
-        function checkUnit(unit, value) {
-            var newUnit = LineUtils.getUnit(value);
-            return !newUnit || unit === newUnit;
-        }
-
         // Check that the units match
-        var unit = LineUtils.getUnit(start.x) || LineUtils.getUnit(start.y)
-                || LineUtils.getUnit(end.x) || LineUtils.getUnit(end.y);
+        var unit = getUnit(start.x) || getUnit(start.y)
+                || getUnit(end.x) || getUnit(end.y);
         if (unit && (
             !checkUnit(unit, start.x) || !checkUnit(unit, start.y)
             || !checkUnit(unit, end.x) || !checkUnit(unit, end.y))) {
@@ -87,3 +93,5 @@ var LineUtils = {
         return len;
     }
 };
+
+})();
