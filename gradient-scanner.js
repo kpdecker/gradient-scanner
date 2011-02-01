@@ -35,7 +35,7 @@ $(document).ready(function() {
         colorStops.forEach(function(stop, index) {
             var stopEl = $.tmpl("colorStopTemplate", {
                 position: stop.position,
-                colorCss: "RGBA(" + stop.color.join(", ") + ")",
+                colorCss: ColorStops.getColorValue(stop.color),
             });
             stopEl.data("stopIndex", index);
             colorStopsEl.append(stopEl);
