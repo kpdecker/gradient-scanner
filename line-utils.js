@@ -13,9 +13,20 @@ var LineUtils = {
         return /\d+(.*)/.exec(value)[1] || "px";
     },
 
-    containingRect: function(start, end) {
+    containingRect: function(start, end, width) {
         var topLeft = {x: Math.min(start.x, end.x), y: Math.min(start.y, end.y)},
             bottomRight = {x: Math.max(start.x, end.x), y: Math.max(start.y, end.y)};
+
+        if (width) {
+            var angle = LineUtils.slopeInRads(start, end),
+                horz = Math.floor(width*Math.abs(Math.sin(angle))/2),
+                vert = Math.floor(width*Math.abs(Math.cos(angle))/2);
+            topLeft.x -= horz;
+            topLeft.y -= vert;
+            bottomRight.x += horz;
+            bottomRight.y += vert;
+        }
+
         return {
             x: topLeft.x,
             y: topLeft.y,
