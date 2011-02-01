@@ -31,8 +31,22 @@ var LineUtils = {
      * Range: [0, 2PI]
      */
     slopeInRads: function(start, end) {
-        var rise = end.y-start.y,
-            run = end.x-start.x;
+        function checkUnit(unit, value) {
+            var newUnit = LineUtils.getUnit(value);
+            return !newUnit || unit === newUnit;
+        }
+
+        // Check that the units match
+        var unit = LineUtils.getUnit(start.x) || LineUtils.getUnit(start.y)
+                || LineUtils.getUnit(end.x) || LineUtils.getUnit(end.y);
+        if (unit && (
+            !checkUnit(unit, start.x) || !checkUnit(unit, start.y)
+            || !checkUnit(unit, end.x) || !checkUnit(unit, end.y))) {
+            return NaN;
+        }
+
+        var rise = parseInt(end.y)-parseInt(start.y),
+            run = parseInt(end.x)-parseInt(start.x);
         return (run<0 ? Math.PI : (rise<0 ? 2*Math.PI : 0)) + (run ? Math.atan(rise/run) : (rise<0?-1:1)*Math.PI/2);
     },
     walkLine: function(start, end, callback) {

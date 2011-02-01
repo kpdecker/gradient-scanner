@@ -28,7 +28,7 @@ $(document).ready(function(){
 
     test("slopeInRads", function() {
         // Testing conditional logic only, assuming that the math is correct
-        expect(6);
+        expect(13);
         equals(LineUtils.slopeInRads({x:0, y:0}, {x:1, y:0}), 0, "slopeInRads({0,0}, {1,0})");
         equals(LineUtils.slopeInRads({x:1, y:0}, {x:0, y:0}), Math.PI, "slopeInRads({1,0}, {0,0})");
 
@@ -37,5 +37,16 @@ $(document).ready(function(){
 
         equals(LineUtils.slopeInRads({x:0, y:0}, {x:1, y:1}), Math.PI/4, "slopeInRads({0,0}, {1,1})");
         equals(LineUtils.slopeInRads({x:1, y:1}, {x:0, y:0}), 5*Math.PI/4, "slopeInRads({1,1}, {0,0})");
+
+        equals(LineUtils.slopeInRads({x:0, y:0}, {x:"1%", y:0}), 0, "slopeInRads({0,0}, {1%,0})");
+        equals(LineUtils.slopeInRads({x:"1%", y:0}, {x:0, y:0}), Math.PI, "slopeInRads({1%,0}, {0,0})");
+
+        equals(LineUtils.slopeInRads({x:0, y:0}, {x:0, y:"1%"}), Math.PI/2, "slopeInRads({0,0}, {0,1%})");
+        equals(LineUtils.slopeInRads({x:0, y:"1%"}, {x:0, y:0}), 3*Math.PI/2, "slopeInRads({0,1%}, {0,0})");
+
+        equals(LineUtils.slopeInRads({x:0, y:0}, {x:"1%", y:"1%"}), Math.PI/4, "slopeInRads({0,0}, {1%,1%})");
+        equals(LineUtils.slopeInRads({x:"1%", y:"1%"}, {x:0, y:0}), 5*Math.PI/4, "slopeInRads({1%,1%}, {0,0})");
+
+        deepEqual(LineUtils.slopeInRads({x:"1%", y:"1%"}, {x:1, y:0}), NaN, "slopeInRads({1%,1%}, {1,0})");
     });
 });
