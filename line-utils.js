@@ -7,14 +7,20 @@ var LineUtils;
 (function() {
 
 function getUnit(value) {
-    if (parseInt(value) == 0) {
+    if (parseInt(value) === 0) {
         return 0;
     }
     return /\d+(.*)/.exec(value)[1] || "px";
 }
 function checkUnit(unit, value) {
     var newUnit = getUnit(value);
-    return !newUnit || unit === newUnit;
+    if (unit === 0 || unit === newUnit) {
+        return newUnit;
+    } else if (newUnit === 0) {
+        return unit;
+    } else {
+        return false;
+    }
 }
 
 LineUtils = {
@@ -54,11 +60,12 @@ LineUtils = {
      */
     slopeInRads: function(start, end) {
         // Check that the units match
-        var unit = getUnit(start.x) || getUnit(start.y)
-                || getUnit(end.x) || getUnit(end.y);
-        if (unit && (
-            !checkUnit(unit, start.x) || !checkUnit(unit, start.y)
-            || !checkUnit(unit, end.x) || !checkUnit(unit, end.y))) {
+        var unit = 0;
+        unit = checkUnit(unit, start.x);
+        unit = checkUnit(unit, start.y);
+        unit = checkUnit(unit, end.x);
+        unit = checkUnit(unit, end.y);
+        if (unit === false) {
             return NaN;
         }
 
