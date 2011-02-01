@@ -3,6 +3,16 @@
  * See LICENSE for license information
  */
 var LineUtils = {
+    /**
+     * Retrieves the unit from a given value (defaulting to pixels if undefined)
+     */
+    getUnit: function(value) {
+        if (parseInt(value) == 0) {
+            return 0;
+        }
+        return /\d+(.*)/.exec(value)[1] || "px";
+    },
+
     containingRect: function(start, end) {
         var topLeft = {x: Math.min(start.x, end.x), y: Math.min(start.y, end.y)},
             bottomRight = {x: Math.max(start.x, end.x), y: Math.max(start.y, end.y)};

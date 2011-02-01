@@ -5,6 +5,17 @@
 $(document).ready(function(){
     module("LineUtils");
 
+    test("getUnit", function() {
+        expect(6);
+        equals(LineUtils.getUnit(0), 0, "getUnit(0)");
+        equals(LineUtils.getUnit("0px"), 0, "getUnit(0px)");
+        equals(LineUtils.getUnit("0%"), 0, "getUnit(0%)");
+
+        equals(LineUtils.getUnit(1), "px", "getUnit(1)");
+        equals(LineUtils.getUnit("1px"), "px", "getUnit(1px)");
+        equals(LineUtils.getUnit("1%"), "%", "getUnit(1%)");
+    });
+
     test("containingRect", function() {
         expect(6);
         deepEqual(LineUtils.containingRect({x:0, y:0}, {x:0, y:1}), {x:0,y:0, width:1,height:1}, "containingRect({0,0}, {0,1})");
