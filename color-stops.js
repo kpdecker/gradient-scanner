@@ -222,7 +222,7 @@ var ColorStops = {};
     };
 
     var cssGenerators = {
-        webkitOld: function(type, coords, colorStops) {
+        webkitOld: function(type, dragStart, dragEnd, colorStops) {
             var stopCSS = colorStops.map(function(stop) {
                 if (!stop.position) {
                     return "from(" + ColorStops.getColorValue(stop.color) + ")";
@@ -233,43 +233,52 @@ var ColorStops = {};
                 }
             }).join(", ");
 
-            return "-webkit-gradient(" + type + ", " + coords.join(", ") + ", " + stopCSS + ")";
+            var points = dragStart.x + " " + dragStart.y + ", " + dragEnd.x + " " + dragEnd.y;
+
+            return "-webkit-gradient(" + type + ", " + points + ", " + stopCSS + ")";
         },
-        mozilla: function(type, coords, colorStops) {
+        mozilla: function(type, dragStart, dragEnd, colorStops) {
             // TODO : Optimize this for equally spaced cases
             var stopCSS = colorStops.map(function(stop) {
-                return ColorStops.getColorValue(stop.color) + " " + Math.floor(stop.position * 1000)/10 + "%";
-            }).join(", ");
+                    return ColorStops.getColorValue(stop.color) + " " + Math.floor(stop.position * 1000)/10 + "%";
+                }).join(", "),
+
+                angle = 360-LineUtils.radsToDegrees(LineUtils.slopeInRads(dragStart, dragEnd)),
+                point = dragStart.x || dragStart.y ?
+                        parseInt(dragStart.x) + (LineUtils.getUnit(dragStart.x) || "") + " "
+                        + parseInt(dragStart.y) + (LineUtils.getUnit(dragStart.y) || "")
+                    : "";
+
+            // Generate the position component if necessary
+            var position = point + (angle !== 270 ? (point && " ") + angle + "deg" : "");
+            position = position + (position && ", ");
 
             if (type === "linear") {
                 // TODO : Figure out what the angle is from the two provided coordinates
-                return "-moz-linear-gradient(" + coords[0] + ", " + stopCSS + ")";
+                return "-moz-linear-gradient(" + position + stopCSS + ")";
             } else if (type === "radial") {
                 // TODO : Lets do this
             }
         }
     };
 
-    ColorStops.generateCSS = function(colorStops) {
+    ColorStops.generateCSS = function(type, dragStart, dragEnd, colorStops) {
         colorStops = colorStops.filter(function(stop) {
             return !stop.disabled;
         });
 
-        // TODO : Parameterize this
-        var type = "linear",
-            coords = ["left center", "right center"];
-
         var ret = [];
         for (var name in cssGenerators) {
             if (cssGenerators.hasOwnProperty(name)) {
-                ret.push(cssGenerators[name](type, coords, colorStops));
+                ret.push(cssGenerators[name](type, dragStart, dragEnd, colorStops));
             }
         }
 
         return ret;
     };
-    ColorStops.applyBackground = function(el, colorStops) {
-        var css = ColorStops.generateCSS(colorStops),
+
+    ColorStops.applyBackground = function(el, type, dragStart, dragEnd, colorStops) {
+        var css = ColorStops.generateCSS(type, dragStart, dragEnd, colorStops),
             len = css.length;
         for (var i = 0; i < len; i++) {
             el.css("background-image", css[i]);

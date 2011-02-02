@@ -20,12 +20,12 @@ $(document).ready(function() {
             + "${colorCss} ${position}"
         + "</div>");
 
-    var dragStart, dragEnd, imageData, colorStops, deltaE = ColorStops.JND;
+    var dragStart, dragEnd, imageData, gradientType = "linear", colorStops, deltaE = ColorStops.JND;
 
     function outputGradient() {
-        var css = ColorStops.generateCSS(colorStops);
+        var css = ColorStops.generateCSS(gradientType, dragStart, dragEnd, colorStops);
 
-        ColorStops.applyBackground($("#gradientPreview"), colorStops);
+        ColorStops.applyBackground($("#gradientPreview"), "linear", {x: 0, y: 0}, {x: "100%", y: 0}, colorStops);
         $("#generatedCss")[0].textContent = "background-image: " + css.join(";\nbackground-image: ");
         $("#stopCount").text("Count: " + colorStops.filter(function(stop) { return !stop.disabled; }).length + " deltaE: " + deltaE);
     }
