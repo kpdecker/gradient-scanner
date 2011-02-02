@@ -213,6 +213,7 @@ var ColorStops = {};
     };
 
     ColorStops.getColorValue = function(color) {
+        color = color.map(Math.floor);
         if (color[3] === 255) {
             return "rgb(" + color[0] + ", " + color[1] + ", " + color[2] + ")";
         } else {
