@@ -119,6 +119,9 @@ LineUtils = {
             run = parseInt(end.x)-parseInt(start.x);
         return (run<0 ? Math.PI : (rise<0 ? 2*Math.PI : 0)) + (run ? Math.atan(rise/run) : (rise<0?-1:1)*Math.PI/2);
     },
+    radsToDegrees: function(rads) {
+        return 180*rads/Math.PI;
+    },
     walkLine: function(start, end, callback) {
         // Determine the properties of our line
         var rise = end.y-start.y,
