@@ -20,7 +20,7 @@ $(document).ready(function() {
             + "${colorCss} ${position}"
         + "</div>");
 
-    var dragStart, dragEnd, imageData, gradientType = "linear", colorStops, deltaE = ColorStops.JND;
+    var dragging, dragStart, dragEnd, imageData, gradientType = "linear", colorStops, deltaE = ColorStops.JND;
 
     function outputGradient() {
         var css = ColorStops.generateCSS(gradientType, dragStart, dragEnd, colorStops);
@@ -58,6 +58,7 @@ $(document).ready(function() {
     });
 
     canvas.parent().mousedown(function(event) {
+        dragging = true;
         dragStart = {x: event.pageX-canvasOffset.left, y: event.pageY-canvasOffset.top};
 
         var edgeSnaps = ImageDataUtils.getInitialSnapToTarget(edgeContext, dragStart);
@@ -71,7 +72,7 @@ $(document).ready(function() {
 
         event.preventDefault();
     }).mousemove(function(event) {
-        if (dragStart) {
+        if (dragging) {
             dragEnd = {x: event.pageX-canvasOffset.left, y: event.pageY-canvasOffset.top};
 
             // Check for snapto
@@ -115,7 +116,7 @@ $(document).ready(function() {
     }).mouseup(function(event) {
         updateGradient();
 
-        dragStart = undefined;
+        dragging = false;
     });
     colorStopsEl.delegate(".color-stop", "click", function(event) {
         var el = $(this);
