@@ -97,8 +97,23 @@ LineUtils = {
         };
     },
 
+    /**
+     * Determines the distance between two points. The units of this value are the same as those input. For the percentage case,
+     * distance is distance covered within the plane of a square with demensions of 100% x 100%. This can not be mapped back
+     * to a fixed unit space directly.
+     */
     distance: function(start, end) {
-        return Math.sqrt(Math.pow(end.y-start.y,2) + Math.pow(end.x-start.x, 2));
+        // Check that the units match
+        var unit = 0;
+        unit = checkUnit(unit, start.x);
+        unit = checkUnit(unit, start.y);
+        unit = checkUnit(unit, end.x);
+        unit = checkUnit(unit, end.y);
+        if (unit === false) {
+            return NaN;
+        }
+
+        return Math.sqrt(Math.pow(parseInt(end.y)-parseInt(start.y),2) + Math.pow(parseInt(end.x)-parseInt(start.x), 2));
     },
     /**
      * Determines the angle, in radians of the line connected by these two points.

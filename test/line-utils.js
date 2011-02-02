@@ -62,6 +62,30 @@ $(document).ready(function(){
         deepEqual(LineUtils.relativeCoords({x:"1%", y:0}, {x:0, y:1}), NaN, "relativeCoords({1%,0}, {0,1})");
     });
 
+    test("distance", function() {
+        // Testing conditional logic only, assuming that the math is correct
+        expect(13);
+        equals(LineUtils.distance({x:0, y:0}, {x:2, y:0}), 2, "distance({0,0}, {2,0})");
+        equals(LineUtils.distance({x:2, y:0}, {x:0, y:0}), 2, "distance({2,0}, {0,0})");
+
+        equals(LineUtils.distance({x:0, y:0}, {x:0, y:2}), 2, "distance({0,0}, {0,2})");
+        equals(LineUtils.distance({x:0, y:2}, {x:0, y:0}), 2, "distance({0,2}, {0,0})");
+
+        equals(LineUtils.distance({x:0, y:0}, {x:3, y:4}), 5, "distance({0,0}, {3,4})");
+        equals(LineUtils.distance({x:3, y:4}, {x:0, y:0}), 5, "distance({3,4}, {0,0})");
+
+        equals(LineUtils.distance({x:0, y:0}, {x:4, y:3}), 5, "distance({0,0}, {4,3})");
+        equals(LineUtils.distance({x:4, y:3}, {x:0, y:0}), 5, "distance({4,3}, {0,0})");
+
+        equals(LineUtils.distance({x:0, y:0}, {x:"1%", y:0}), 1, "distance({0,0}, {1%,0})");
+        equals(LineUtils.distance({x:"1%", y:0}, {x:0, y:0}), 1, "distance({1%,0}, {0,0})");
+
+        equals(LineUtils.distance({x:0, y:0}, {x:0, y:"1%"}), 1, "distance({0,0}, {0,1%})");
+        equals(LineUtils.distance({x:0, y:"1%"}, {x:0, y:0}), 1, "distance({0,1%}, {0,0})");
+
+        deepEqual(LineUtils.distance({x:"1%", y:"1%"}, {x:1, y:0}), NaN, "distance({1%,1%}, {1,0})");
+    });
+
     test("slopeInRads", function() {
         // Testing conditional logic only, assuming that the math is correct
         expect(13);
