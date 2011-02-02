@@ -20,7 +20,7 @@ $(document).ready(function() {
             + "${colorCss} ${position}"
         + "</div>");
 
-    var dragging, dragStart, dragEnd, imageData, gradientType = "linear", colorStops, deltaE = ColorStops.JND;
+    var dragging, dragStart, dragEnd, relStart, relEnd, imageData, gradientType = "linear", colorStops, deltaE = ColorStops.JND;
 
     function outputGradient() {
         var css = ColorStops.generateCSS(gradientType, dragStart, dragEnd, colorStops);
@@ -42,6 +42,17 @@ $(document).ready(function() {
         });
 
         outputGradient();
+    }
+
+    function updatePreview() {
+        var containing = LineUtils.containingRect(dragStart, dragEnd, 25);
+
+        $(".preview-cell").css("left", containing.x+"px")
+                .css("top", containing.y+"px")
+                .css("width", containing.width+"px")
+                .css("height", containing.height+"px");
+
+        ColorStops.applyBackground($(".preview-cell"), gradientType, relStart, relEnd, colorStops);
     }
 
     $(".delta-e-slider").slider({
@@ -114,9 +125,16 @@ $(document).ready(function() {
                     .css("-webkit-transform", rotate);
         }
     }).mouseup(function(event) {
-        updateGradient();
+        var containing = LineUtils.containingRect(dragStart, dragEnd);
+
+        // Clip the coords to their containing boxes.
+        relStart = LineUtils.relativeCoords(dragStart, containing);
+        relEnd = LineUtils.relativeCoords(dragEnd, containing);
 
         dragging = false;
+
+        updateGradient();
+        updatePreview();
     });
     colorStopsEl.delegate(".color-stop", "click", function(event) {
         var el = $(this);
