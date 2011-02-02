@@ -11,20 +11,26 @@
     <link rel="stylesheet" type="text/css" href="css/gradient-scanner.css">
 </head>
 <body>
-    <div class="image-display">
-        <canvas id="imageDisplay" width="600" height="600"></canvas>
-        <div id="lineOverlay"></div>
+    <div class="image-section">
+        <div class="image-display">
+            <canvas id="imageDisplay" width="600" height="600"></canvas>
+            <div id="lineOverlay"></div>
+        </div>
+        <div id="lineInfo"></div>
     </div>
-    <div id="lineInfo"></div>
+    <div class="preview-section">
+        <pre id="generatedCss"></pre>
+    </div>
     <hr>
-    <div class="gradient-preview">
-        <img id="linePreview" class="preview-component" src="data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=">
-        <div id="gradientPreview" class="preview-component"></div>
+    <div class="editor-section">
+        <div class="gradient-preview">
+            <img id="linePreview" class="preview-component" src="data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=">
+            <div id="gradientPreview" class="preview-component"></div>
+        </div>
+        <div class="delta-e-slider"></div>
+        <div id="colorStops" class="stops-list"></div>
+        <div id="stopCount"></div>
     </div>
-    <div class="delta-e-slider"></div>
-    <div id="colorStops" class="stops-list"></div>
-    <div id="stopCount"></div>
-    <pre id="generatedCss"></pre>
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
