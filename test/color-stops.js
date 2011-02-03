@@ -21,7 +21,7 @@ $(document).ready(function(){
     });
 
     test("generateCSS", function() {
-        expect(7);
+        expect(17);
         var redToBlue = [
                 {position: 0, color: [255, 0, 0, 255]},
                 {position: 0.5, color: [255, 0, 255, 255], disabled: true},
@@ -67,5 +67,51 @@ $(document).ready(function(){
             "-webkit-gradient(linear, 100% 100%, 0 0, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
             "-moz-linear-gradient(100% 100% 135deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)"
         ], "generateCSS(linear, {100%, 100%}, {0,0}, redToBlue)");
+
+        // Positions that do not fill the entire region
+        deepEqual(ColorStops.generateCSS("linear", {x:0, y:"25%"}, {x:0, y:"50%"}, redToBlue), [
+            "-webkit-gradient(linear, 0 25%, 0 50%, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
+            "-moz-linear-gradient(0 25%, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 33.3%)"
+        ], "generateCSS(linear, {0,25%}, {0,50%}, redToBlue)");
+        deepEqual(ColorStops.generateCSS("linear", {x:0, y:"50%"}, {x:0, y:"25%"}, redToBlue), [
+            "-webkit-gradient(linear, 0 50%, 0 25%, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
+            "-moz-linear-gradient(0 50% 90deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 50%)"
+        ], "generateCSS(linear, {0,50%}, {0,25%}, redToBlue)");
+
+        deepEqual(ColorStops.generateCSS("linear", {x:"25%", y:0}, {x:"50%", y:0}, redToBlue), [
+            "-webkit-gradient(linear, 25% 0, 50% 0, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
+            "-moz-linear-gradient(25% 0 360deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 33.3%)"
+        ], "generateCSS(linear, {25%,0}, {50%,0}, redToBlue)");
+        deepEqual(ColorStops.generateCSS("linear", {x:"50%", y:0}, {x:"25%", y:0}, redToBlue), [
+            "-webkit-gradient(linear, 50% 0, 25% 0, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
+            "-moz-linear-gradient(50% 0 180deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 50%)"
+        ], "generateCSS(linear, {50%,0}, {25%,0}, redToBlue)");
+
+        deepEqual(ColorStops.generateCSS("linear", {x:"25%", y:"25%"}, {x:"50%", y:"50%"}, redToBlue), [
+            "-webkit-gradient(linear, 25% 25%, 50% 50%, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
+            "-moz-linear-gradient(25% 25% 315deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 33.3%)"
+        ], "generateCSS(linear, {25%,25%}, {50%,50%}, redToBlue)");
+        deepEqual(ColorStops.generateCSS("linear", {x:"50%", y:"50%"}, {x:"25%", y:"25%"}, redToBlue), [
+            "-webkit-gradient(linear, 50% 50%, 25% 25%, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
+            "-moz-linear-gradient(50% 50% 135deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 50%)"
+        ], "generateCSS(linear, {50%,50%}, {25%,25%}, redToBlue)");
+
+        // Non-percentage positions
+        deepEqual(ColorStops.generateCSS("linear", {x:25, y:25}, {x:50, y:50}, redToBlue), [
+            "-webkit-gradient(linear, 25px 25px, 50px 50px, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
+            "-moz-linear-gradient(25px 25px 315deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)"
+        ], "generateCSS(linear, {25,25}, {50,50}, redToBlue)");
+        deepEqual(ColorStops.generateCSS("linear", {x:50, y:50}, {x:25, y:25}, redToBlue), [
+            "-webkit-gradient(linear, 50px 50px, 25px 25px, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
+            "-moz-linear-gradient(50px 50px 135deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 50%)"
+        ], "generateCSS(linear, {50,50}, {25,25}, redToBlue)");
+        deepEqual(ColorStops.generateCSS("linear", {x:25, y:25}, {x:50, y:50}, redToBlue, {x:0,y:0, width:100,height:100}), [
+            "-webkit-gradient(linear, 25px 25px, 50px 50px, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
+            "-moz-linear-gradient(25px 25px 315deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 33.3%)"
+        ], "generateCSS(linear, {25,25}, {50,50}, redToBlue, {0,0,100,100})");
+        deepEqual(ColorStops.generateCSS("linear", {x:50, y:50}, {x:25, y:25}, redToBlue, {x:0,y:0, width:100,height:100}), [
+            "-webkit-gradient(linear, 50px 50px, 25px 25px, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
+            "-moz-linear-gradient(50px 50px 135deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 50%)"
+        ], "generateCSS(linear, {50,50}, {25,25}, redToBlue, {0,0,100,100})");
     });
 });

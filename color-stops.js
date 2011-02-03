@@ -221,6 +221,22 @@ var ColorStops = {};
         }
     };
 
+    function formatUnit(value) {
+        return parseInt(value, 10) + (LineUtils.getUnit(value) || "");
+    }
+    function generateContainer(dragStart, dragEnd) {
+        if (LineUtils.getUnit(dragStart.x) === "%" || LineUtils.getUnit(dragStart.y) === "%"
+            || LineUtils.getUnit(dragEnd.x) === "%" || LineUtils.getUnit(dragEnd.y) === "%") {
+            return {x:0,y:0, width:"100%",height:"100%"};
+        } else {
+            return {
+                x:0,
+                y:0,
+                width:Math.max(parseInt(dragStart.x, 10), parseInt(dragEnd.x, 10)) + (LineUtils.getUnit(dragStart.x) || LineUtils.getUnit(dragEnd.x) || 0),
+                height:Math.max(parseInt(dragStart.x, 10), parseInt(dragEnd.x, 10)) + (LineUtils.getUnit(dragStart.y) || LineUtils.getUnit(dragEnd.y) || 0)
+            };
+        }
+    }
     var cssGenerators = {
         webkitOld: function(type, dragStart, dragEnd, colorStops) {
             var stopCSS = colorStops.map(function(stop) {
@@ -233,21 +249,20 @@ var ColorStops = {};
                 }
             }).join(", ");
 
-            var points = dragStart.x + " " + dragStart.y + ", " + dragEnd.x + " " + dragEnd.y;
+            var points = formatUnit(dragStart.x) + " " + formatUnit(dragStart.y) + ", " + formatUnit(dragEnd.x) + " " + formatUnit(dragEnd.y);
 
             return "-webkit-gradient(" + type + ", " + points + ", " + stopCSS + ")";
         },
-        mozilla: function(type, dragStart, dragEnd, colorStops) {
+        mozilla: function(type, dragStart, dragEnd, colorStops, container) {
             // TODO : Optimize this for equally spaced cases
-            var stopCSS = colorStops.map(function(stop) {
-                    return ColorStops.getColorValue(stop.color) + " " + Math.floor(stop.position * 1000)/10 + "%";
+
+            var tailAdjust = LineUtils.percentageOfRay(dragStart, dragEnd, container||generateContainer(dragStart, dragEnd)),
+                stopCSS = colorStops.map(function(stop) {
+                    return ColorStops.getColorValue(stop.color) + " " + Math.floor(stop.position * tailAdjust * 1000)/10 + "%";
                 }).join(", "),
 
                 angle = 360-LineUtils.radsToDegrees(LineUtils.slopeInRads(dragStart, dragEnd)),
-                point = dragStart.x || dragStart.y ?
-                        parseInt(dragStart.x) + (LineUtils.getUnit(dragStart.x) || "") + " "
-                        + parseInt(dragStart.y) + (LineUtils.getUnit(dragStart.y) || "")
-                    : "";
+                point = dragStart.x || dragStart.y ? formatUnit(dragStart.x) + " " + formatUnit(dragStart.y) : "";
 
             // Generate the position component if necessary
             var position = point + (angle !== 270 ? (point && " ") + angle + "deg" : "");
@@ -262,7 +277,7 @@ var ColorStops = {};
         }
     };
 
-    ColorStops.generateCSS = function(type, dragStart, dragEnd, colorStops) {
+    ColorStops.generateCSS = function(type, dragStart, dragEnd, colorStops, container) {
         colorStops = colorStops.filter(function(stop) {
             return !stop.disabled;
         });
@@ -270,7 +285,7 @@ var ColorStops = {};
         var ret = [];
         for (var name in cssGenerators) {
             if (cssGenerators.hasOwnProperty(name)) {
-                ret.push(cssGenerators[name](type, dragStart, dragEnd, colorStops));
+                ret.push(cssGenerators[name](type, dragStart, dragEnd, colorStops, container));
             }
         }
 
