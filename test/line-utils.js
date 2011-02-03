@@ -86,6 +86,50 @@ $(document).ready(function(){
         deepEqual(LineUtils.distance({x:"1%", y:"1%"}, {x:1, y:0}), NaN, "distance({1%,1%}, {1,0})");
     });
 
+    test("lineIntercepts", function() {
+        expect(27);
+
+        deepEqual(LineUtils.lineIntercepts({x:0, y:0}, {x:0, y:1}, {x:0,y:0, width:1,height:1}), [{x:0, y:0}, {x:0, y:1}], "lineIntercepts({0,0}, {0,1}, {0,0,1,1})");
+        deepEqual(LineUtils.lineIntercepts({x:0, y:0}, {x:1, y:0}, {x:0,y:0, width:1,height:1}), [{x:0, y:0}, {x:1, y:0}], "lineIntercepts({0,0}, {1,0}, {0,0,1,1})");
+        deepEqual(LineUtils.lineIntercepts({x:0, y:0}, {x:1, y:1}, {x:0,y:0, width:1,height:1}), [{x:0, y:0}, {x:1, y:1}], "lineIntercepts({0,0}, {1,1}, {0,0,1,1})");
+        deepEqual(LineUtils.lineIntercepts({x:1, y:1}, {x:0, y:0}, {x:0,y:0, width:1,height:1}), [{x:1, y:1}, {x:0, y:0}], "lineIntercepts({1,1}, {0,0}, {0,0,1,1})");
+        deepEqual(LineUtils.lineIntercepts({x:1, y:0}, {x:0, y:1}, {x:0,y:0, width:1,height:1}), [{x:1, y:0}, {x:0, y:1}], "lineIntercepts({1,0}, {0,1}, {0,0,1,1})");
+        deepEqual(LineUtils.lineIntercepts({x:0, y:1}, {x:1, y:0}, {x:0,y:0, width:1,height:1}), [{x:0, y:1}, {x:1, y:0}], "lineIntercepts({0,1}, {1,0}, {0,0,1,1})");
+
+        // No intercepts
+        deepEqual(LineUtils.lineIntercepts({x:0, y:10}, {x:10, y:10}, {x:0,y:0, width:1,height:1}), [], "lineIntercepts({0,10}, {10,10}, {0,0,1,1})");
+        deepEqual(LineUtils.lineIntercepts({x:10, y:0}, {x:10, y:10}, {x:0,y:0, width:1,height:1}), [], "lineIntercepts({10,0}, {10,10}, {0,0,1,1})");
+
+        // Not connected to the edge cases
+        deepEqual(LineUtils.lineIntercepts({x:1, y:2}, {x:2, y:3}, {x:0,y:0, width:10,height:10}), [{x:0, y:1}, {x:9, y:10}], "lineIntercepts({1,2}, {2,3}, {0,0,10,10})");
+        deepEqual(LineUtils.lineIntercepts({x:2, y:3}, {x:1, y:2}, {x:0,y:0, width:10,height:10}), [{x:9, y:10}, {x:0, y:1}], "lineIntercepts({2,3}, {1,2}, {0,0,10,10})");
+
+        deepEqual(LineUtils.lineIntercepts({x:9, y:1}, {x:8, y:2}, {x:0,y:0, width:10,height:10}), [{x:10, y:0}, {x:0, y:10}], "lineIntercepts({9,1}, {8,2}, {0,0,10,10})");
+        deepEqual(LineUtils.lineIntercepts({x:8, y:2}, {x:9, y:1}, {x:0,y:0, width:10,height:10}), [{x:0, y:10}, {x:10, y:0}], "lineIntercepts({2,8}, {9,1}, {0,0,10,10})");
+
+        deepEqual(LineUtils.lineIntercepts({x:9, y:1}, {x:8, y:2}, {x:-1,y:-1, width:11,height:11}), [{x:10, y:0}, {x:0, y:10}], "lineIntercepts({9,1}, {8,2}, {-1,-1,11,11})");
+        deepEqual(LineUtils.lineIntercepts({x:8, y:2}, {x:9, y:1}, {x:-1,y:-1, width:11,height:11}), [{x:0, y:10}, {x:10, y:0}], "lineIntercepts({2,8}, {9,1}, {-1,-1,11,11})");
+
+        // Ray mode
+        deepEqual(LineUtils.lineIntercepts({x:0, y:0}, {x:0, y:1}, {x:0,y:0, width:1,height:1}, true), [{x:0, y:0}, {x:0, y:1}], "lineIntercepts({0,0}, {0,1}, {0,0,1,1}, true)");
+        deepEqual(LineUtils.lineIntercepts({x:0, y:0}, {x:1, y:0}, {x:0,y:0, width:1,height:1}, true), [{x:0, y:0}, {x:1, y:0}], "lineIntercepts({0,0}, {1,0}, {0,0,1,1}, true)");
+        deepEqual(LineUtils.lineIntercepts({x:0, y:0}, {x:1, y:1}, {x:0,y:0, width:1,height:1}, true), [{x:0, y:0}, {x:1, y:1}], "lineIntercepts({0,0}, {1,1}, {0,0,1,1}, true)");
+        deepEqual(LineUtils.lineIntercepts({x:1, y:1}, {x:0, y:0}, {x:0,y:0, width:1,height:1}, true), [{x:1, y:1}, {x:0, y:0}], "lineIntercepts({1,1}, {0,0}, {0,0,1,1}, true)");
+        deepEqual(LineUtils.lineIntercepts({x:1, y:0}, {x:0, y:1}, {x:0,y:0, width:1,height:1}, true), [{x:1, y:0}, {x:0, y:1}], "lineIntercepts({1,0}, {0,1}, {0,0,1,1}, true)");
+        deepEqual(LineUtils.lineIntercepts({x:0, y:1}, {x:1, y:0}, {x:0,y:0, width:1,height:1}, true), [{x:0, y:1}, {x:1, y:0}], "lineIntercepts({0,1}, {1,0}, {0,0,1,1}, true)");
+
+        deepEqual(LineUtils.lineIntercepts({x:1, y:2}, {x:2, y:3}, {x:0,y:0, width:10,height:10}, true), [{x:9, y:10}], "lineIntercepts({1,2}, {2,3}, {0,0,10,10}, true)");
+        deepEqual(LineUtils.lineIntercepts({x:2, y:3}, {x:1, y:2}, {x:0,y:0, width:10,height:10}, true), [{x:0, y:1}], "lineIntercepts({2,3}, {1,2}, {0,0,10,10}, true)");
+
+        deepEqual(LineUtils.lineIntercepts({x:9, y:1}, {x:8, y:2}, {x:0,y:0, width:10,height:10}, true), [{x:0, y:10}], "lineIntercepts({9,1}, {8,2}, {0,0,10,10}, true)");
+        deepEqual(LineUtils.lineIntercepts({x:8, y:2}, {x:9, y:1}, {x:0,y:0, width:10,height:10}, true), [{x:10, y:0}], "lineIntercepts({2,8}, {9,1}, {0,0,10,10}, true)");
+
+        // Units
+        deepEqual(LineUtils.lineIntercepts({x:0, y:0}, {x:0, y:"1%"}, {x:0,y:0, width:"1%",height:"1%"}), [{x:0, y:0}, {x:0, y:"1%"}], "lineIntercepts({0,0}, {0,1%}, {0,0,1%,1%})");
+        deepEqual(LineUtils.lineIntercepts({x:0, y:0}, {x:"1%", y:"1%"}, {x:0,y:0, width:"1%",height:"1%"}), [{x:0, y:0}, {x:"1%", y:"1%"}], "lineIntercepts({0,0}, {1%,1%}, {0,0,1%,1%})");
+        deepEqual(LineUtils.lineIntercepts({x:0, y:0}, {x:0, y:"1%"}, {x:0,y:0, width:1,height:1}), NaN, "lineIntercepts({0,0}, {0,1%}, {0,0,1,1})");
+    });
+
     test("slopeInRads", function() {
         // Testing conditional logic only, assuming that the math is correct
         expect(13);

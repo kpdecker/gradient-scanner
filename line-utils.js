@@ -116,6 +116,107 @@ LineUtils = {
         return Math.sqrt(Math.pow(parseInt(end.y)-parseInt(start.y),2) + Math.pow(parseInt(end.x)-parseInt(start.x), 2));
     },
     /**
+     * Determines the two points at which the line connecting start and end intersects with the container
+     * boundaries.
+     */
+    lineIntercepts: function(start, end, container, ray) {
+        // Check that the units match
+        var unit = 0;
+        unit = checkUnit(unit, start.x);
+        unit = checkUnit(unit, start.y);
+        unit = checkUnit(unit, end.x);
+        unit = checkUnit(unit, end.y);
+        unit = checkUnit(unit, container.x);
+        unit = checkUnit(unit, container.y);
+        unit = checkUnit(unit, container.width);
+        unit = checkUnit(unit, container.height);
+        if (unit === false) {
+            return NaN;
+        }
+
+        start = {x: parseInt(start.x), y: parseInt(start.y)};
+        end = {x: parseInt(end.x), y: parseInt(end.y)};
+        container = {x: parseInt(container.x), y: parseInt(container.y), width: parseInt(container.width), height: parseInt(container.height)};
+
+        var rise = end.y-start.y,
+            run = end.x-start.x,
+            slope = rise/run,
+            b = (start.y*end.x - end.y*start.x)/run,
+
+            intercepts = [],
+
+            x, y;
+
+        // Special case the vertical
+        if (!run) {
+            if (container.x <= end.x && end.x <= container.x+container.width) {
+                intercepts = [{x: end.x, y: container.y+(end.y<start.y?container.height:0)}, {x: end.x, y: container.y+(end.y>start.y?container.height:0)}];
+
+                var len = intercepts.length,
+                    check;
+                while (len--) {
+                    check = intercepts[len];
+                    if (ray && (rise>0 ? check.y<start.y : check.y>start.y)) {
+                        intercepts.splice(len, 1);
+                    }
+
+                    check.x = combineUnit(check.x, unit);
+                    check.y = combineUnit(check.y, unit);
+                }
+
+                return intercepts;
+            } else {
+                return [];
+            }
+        }
+
+        // 4 possible intercepts (of which two will be selected)
+        // 1) y = container.y
+        x = (container.y - b)/slope;
+        if (container.x <= x  && x <= container.x+container.width) {
+            intercepts.push({x: x, y: container.y});
+        }
+
+        // 2) x === container.x
+        y = slope*container.x + b;
+        if (container.y <= y && y <= container.y+container.height) {
+            intercepts.push({x: container.x, y: y});
+        }
+
+        // 3) y === container.y+container.height
+        x = (container.y+container.height - b)/slope;
+        if (container.x <= x  && x <= container.x+container.width) {
+            intercepts.push({x: x, y: container.y+container.height});
+        }
+
+        // 4) x === container.x+container.width
+        y = slope*(container.x+container.width) + b;
+        if (container.y <= y && y <= container.y+container.height) {
+            intercepts.push({x: container.x+container.width, y: y});
+        }
+
+        // Order the elements so the first is the entering intercept and the later is the leaving
+        intercepts.sort(function(a, b) { return run>0? a.x-b.x : b.x-a.x; });
+
+        // Remove any duplicates or entries before the ray start and restore the units
+        var len = intercepts.length,
+            check;
+        x = undefined;
+        while (len--) {
+            check = intercepts[len];
+            if (check.x === x || (ray && (run>0 ? check.x<start.x : check.x>start.x))) {
+                intercepts.splice(len, 1);
+            }
+            x = check.x;
+
+            check.x = combineUnit(check.x, unit);
+            check.y = combineUnit(check.y, unit);
+        }
+
+        return intercepts;
+    },
+
+    /**
      * Determines the angle, in radians of the line connected by these two points.
      * Range: [0, 2PI]
      */
