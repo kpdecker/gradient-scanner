@@ -7,10 +7,10 @@ var LineUtils;
 (function() {
 
 function getUnit(value) {
-    if (parseInt(value) === 0) {
+    if (parseInt(value, 10) === 0) {
         return 0;
     }
-    return /\d+(.*)/.exec(value)[1] || "px";
+    return (/\d+(.*)/).exec(value)[1] || "px";
 }
 function checkUnit(unit, value) {
     var newUnit = getUnit(value);
@@ -53,9 +53,9 @@ LineUtils = {
         }
 
         // Remove any units, we'll restore them later
-        start = {x: parseInt(start.x), y: parseInt(start.y)};
-        end = {x: parseInt(end.x), y: parseInt(end.y)};
-        width = parseInt(width);
+        start = {x: parseInt(start.x, 10), y: parseInt(start.y, 10)};
+        end = {x: parseInt(end.x, 10), y: parseInt(end.y, 10)};
+        width = parseInt(width, 10);
 
         var topLeft = {x: Math.min(start.x, end.x), y: Math.min(start.y, end.y)},
             bottomRight = {x: Math.max(start.x, end.x), y: Math.max(start.y, end.y)};
@@ -92,8 +92,8 @@ LineUtils = {
         }
 
         return {
-            x: combineUnit(parseInt(coord.x)-parseInt(origin.x), unit),
-            y: combineUnit(parseInt(coord.y)-parseInt(origin.y), unit)
+            x: combineUnit(parseInt(coord.x, 10)-parseInt(origin.x, 10), unit),
+            y: combineUnit(parseInt(coord.y, 10)-parseInt(origin.y, 10), unit)
         };
     },
 
@@ -113,7 +113,7 @@ LineUtils = {
             return NaN;
         }
 
-        return Math.sqrt(Math.pow(parseInt(end.y)-parseInt(start.y),2) + Math.pow(parseInt(end.x)-parseInt(start.x), 2));
+        return Math.sqrt(Math.pow(parseInt(end.y, 10)-parseInt(start.y, 10),2) + Math.pow(parseInt(end.x, 10)-parseInt(start.x, 10), 2));
     },
 
     /**
@@ -164,9 +164,12 @@ LineUtils = {
             return NaN;
         }
 
-        start = {x: parseInt(start.x), y: parseInt(start.y)};
-        end = {x: parseInt(end.x), y: parseInt(end.y)};
-        container = {x: parseInt(container.x), y: parseInt(container.y), width: parseInt(container.width), height: parseInt(container.height)};
+        start = {x: parseInt(start.x, 10), y: parseInt(start.y, 10)};
+        end = {x: parseInt(end.x, 10), y: parseInt(end.y, 10)};
+        container = {
+            x: parseInt(container.x, 10), y: parseInt(container.y, 10),
+            width: parseInt(container.width, 10), height: parseInt(container.height, 10)
+        };
 
         var rise = end.y-start.y,
             run = end.x-start.x,
@@ -175,15 +178,15 @@ LineUtils = {
 
             intercepts = [],
 
-            x, y;
+            x, y,
+            len, check;
 
         // Special case the vertical
         if (!run) {
             if (container.x <= end.x && end.x <= container.x+container.width) {
                 intercepts = [{x: end.x, y: container.y+(end.y<start.y?container.height:0)}, {x: end.x, y: container.y+(end.y>start.y?container.height:0)}];
 
-                var len = intercepts.length,
-                    check;
+                len = intercepts.length;
                 while (len--) {
                     check = intercepts[len];
                     if (ray && (rise>0 ? check.y<start.y : check.y>start.y)) {
@@ -229,8 +232,7 @@ LineUtils = {
         intercepts.sort(function(a, b) { return run>0? a.x-b.x : b.x-a.x; });
 
         // Remove any duplicates or entries before the ray start and restore the units
-        var len = intercepts.length,
-            check;
+        len = intercepts.length;
         x = undefined;
         while (len--) {
             check = intercepts[len];
@@ -261,8 +263,8 @@ LineUtils = {
             return NaN;
         }
 
-        var rise = parseInt(end.y)-parseInt(start.y),
-            run = parseInt(end.x)-parseInt(start.x);
+        var rise = parseInt(end.y, 10)-parseInt(start.y, 10),
+            run = parseInt(end.x, 10)-parseInt(start.x, 10);
         return (run<0 ? Math.PI : (rise<0 ? 2*Math.PI : 0)) + (run ? Math.atan(rise/run) : (rise<0?-1:1)*Math.PI/2);
     },
     radsToDegrees: function(rads) {
