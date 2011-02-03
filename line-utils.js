@@ -115,6 +115,36 @@ LineUtils = {
 
         return Math.sqrt(Math.pow(parseInt(end.y)-parseInt(start.y),2) + Math.pow(parseInt(end.x)-parseInt(start.x), 2));
     },
+
+    /**
+     * Calculates the percentage of the ray length that a line segment covers, when the ray is constrained by the given container.
+     * @return percentage value [0, 1]
+     */
+    percentageOfRay: function(start, end, container) {
+        // Check that the units match
+        var unit = 0;
+        unit = checkUnit(unit, start.x);
+        unit = checkUnit(unit, start.y);
+        unit = checkUnit(unit, end.x);
+        unit = checkUnit(unit, end.y);
+        unit = checkUnit(unit, container.x);
+        unit = checkUnit(unit, container.y);
+        unit = checkUnit(unit, container.width);
+        unit = checkUnit(unit, container.height);
+        if (unit === false) {
+            return NaN;
+        }
+
+        var intercepts = LineUtils.lineIntercepts(start, end, container, true);
+        if (!intercepts.length) {
+            return 0;
+        }
+
+        var rayDistance = LineUtils.distance(start, intercepts[intercepts.length-1]),
+            segmentDistance = LineUtils.distance(start, end);
+        return segmentDistance/rayDistance;
+    },
+
     /**
      * Determines the two points at which the line connecting start and end intersects with the container
      * boundaries.

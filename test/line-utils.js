@@ -86,6 +86,36 @@ $(document).ready(function(){
         deepEqual(LineUtils.distance({x:"1%", y:"1%"}, {x:1, y:0}), NaN, "distance({1%,1%}, {1,0})");
     });
 
+    test("percentageOfRay", function() {
+        expect(17);
+
+        equals(LineUtils.percentageOfRay({x:0, y:0}, {x:0, y:1}, {x:0,y:0, width:1,height:1}), 1, "percentageOfRay({0,0}, {0,1}, {0,0,1,1})");
+        equals(LineUtils.percentageOfRay({x:0, y:0}, {x:1, y:0}, {x:0,y:0, width:1,height:1}), 1, "percentageOfRay({0,0}, {1,0}, {0,0,1,1})");
+        equals(LineUtils.percentageOfRay({x:0, y:0}, {x:1, y:1}, {x:0,y:0, width:1,height:1}), 1, "percentageOfRay({0,0}, {1,1}, {0,0,1,1})");
+        equals(LineUtils.percentageOfRay({x:1, y:1}, {x:0, y:0}, {x:0,y:0, width:1,height:1}), 1, "percentageOfRay({1,1}, {0,0}, {0,0,1,1})");
+        equals(LineUtils.percentageOfRay({x:1, y:0}, {x:0, y:1}, {x:0,y:0, width:1,height:1}), 1, "percentageOfRay({1,0}, {0,1}, {0,0,1,1})");
+        equals(LineUtils.percentageOfRay({x:0, y:1}, {x:1, y:0}, {x:0,y:0, width:1,height:1}), 1, "percentageOfRay({0,1}, {1,0}, {0,0,1,1})");
+
+        // No intercepts
+        equals(LineUtils.percentageOfRay({x:0, y:10}, {x:10, y:10}, {x:0,y:0, width:1,height:1}), 0, "percentageOfRay({0,10}, {10,10}, {0,0,1,1})");
+        equals(LineUtils.percentageOfRay({x:10, y:0}, {x:10, y:10}, {x:0,y:0, width:1,height:1}), 0, "percentageOfRay({10,0}, {10,10}, {0,0,1,1})");
+
+        // Not connected to the edge cases
+        equals(LineUtils.percentageOfRay({x:1, y:2}, {x:2, y:3}, {x:0,y:0, width:10,height:10}), 0.125, "percentageOfRay({1,2}, {2,3}, {0,0,10,10})");
+        equals(LineUtils.percentageOfRay({x:2, y:3}, {x:1, y:2}, {x:0,y:0, width:10,height:10}), 0.5, "percentageOfRay({2,3}, {1,2}, {0,0,10,10})");
+
+        equals(LineUtils.percentageOfRay({x:8, y:2}, {x:6, y:4}, {x:0,y:0, width:10,height:10}), 0.25, "percentageOfRay({8,2}, {6,4}, {0,0,10,10})");
+        equals(LineUtils.percentageOfRay({x:8, y:2}, {x:9, y:1}, {x:0,y:0, width:10,height:10}), 0.5, "percentageOfRay({2,8}, {9,1}, {0,0,10,10})");
+
+        equals(LineUtils.percentageOfRay({x:8, y:2}, {x:6, y:4}, {x:-1,y:-1, width:11,height:11}), 0.25, "percentageOfRay({8,2}, {6,4}, {-1,-1,11,11})");
+        equals(LineUtils.percentageOfRay({x:8, y:2}, {x:9, y:1}, {x:-1,y:-1, width:11,height:11}), 0.5, "percentageOfRay({2,8}, {9,1}, {-1,-1,11,11})");
+
+        // Units
+        equals(LineUtils.percentageOfRay({x:0, y:0}, {x:0, y:"1%"}, {x:0,y:0, width:"1%",height:"1%"}), 1, "percentageOfRay({0,0}, {0,1%}, {0,0,1%,1%})");
+        equals(LineUtils.percentageOfRay({x:0, y:0}, {x:"1%", y:"1%"}, {x:0,y:0, width:"1%",height:"1%"}), 1, "percentageOfRay({0,0}, {1%,1%}, {0,0,1%,1%})");
+        deepEqual(LineUtils.percentageOfRay({x:0, y:0}, {x:0, y:"1%"}, {x:0,y:0, width:1,height:1}), NaN, "percentageOfRay({0,0}, {0,1%}, {0,0,1,1})");
+    });
+
     test("lineIntercepts", function() {
         expect(27);
 
