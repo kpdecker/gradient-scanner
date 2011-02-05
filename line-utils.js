@@ -145,6 +145,34 @@ LineUtils = {
         return segmentDistance/rayDistance;
     },
 
+    isOnEdge: function(point, container) {
+        // Check that the units match
+        var unit = 0;
+        unit = checkUnit(unit, point.x);
+        unit = checkUnit(unit, point.y);
+        unit = checkUnit(unit, container.x);
+        unit = checkUnit(unit, container.y);
+        unit = checkUnit(unit, container.width);
+        unit = checkUnit(unit, container.height);
+        if (unit === false) {
+            return NaN;
+        }
+
+        point = {x: parseInt(point.x, 10), y: parseInt(point.y, 10)};
+        container = {
+            x: parseInt(container.x, 10), y: parseInt(container.y, 10),
+            width: parseInt(container.width, 10), height: parseInt(container.height, 10)
+        };
+
+        if (point.x === container.x || point.x === container.x+container.width) {
+            return container.y <= point.y && point.y <= container.y + container.height;
+        } else if (point.y === container.y || point.y === container.y+container.height) {
+            return container.x <= point.x && point.x <= container.x + container.width;
+        } else {
+            return false;
+        }
+    },
+
     /**
      * Determines the two points at which the line connecting start and end intersects with the container
      * boundaries.

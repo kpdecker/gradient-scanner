@@ -116,6 +116,41 @@ $(document).ready(function(){
         deepEqual(LineUtils.percentageOfRay({x:0, y:0}, {x:0, y:"1%"}, {x:0,y:0, width:1,height:1}), NaN, "percentageOfRay({0,0}, {0,1%}, {0,0,1,1})");
     });
 
+
+    test("isOnEdge", function() {
+        expect(27);
+
+        equals(LineUtils.isOnEdge({x:0, y:0}, {x:0,y:0, width:10,height:10}), true, "isOnEdge({0,0}, {10,10})");
+        equals(LineUtils.isOnEdge({x:1, y:1}, {x:0,y:0, width:10,height:10}), false, "isOnEdge({1,1}, {10,10})");
+        equals(LineUtils.isOnEdge({x:1, y:0}, {x:0,y:0, width:10,height:10}), true, "isOnEdge({1,0}, {10,10})");
+        equals(LineUtils.isOnEdge({x:0, y:1}, {x:0,y:0, width:10,height:10}), true, "isOnEdge({0,1}, {10,10})");
+        equals(LineUtils.isOnEdge({x:10, y:10}, {x:0,y:0, width:10,height:10}), true, "isOnEdge({10,10}, {10,10})");
+        equals(LineUtils.isOnEdge({x:10, y:0}, {x:0,y:0, width:10,height:10}), true, "isOnEdge({10,0}, {10,10})");
+        equals(LineUtils.isOnEdge({x:0, y:10}, {x:0,y:0, width:10,height:10}), true, "isOnEdge({0,10}, {10,10})");
+        equals(LineUtils.isOnEdge({x:-10, y:-10}, {x:0,y:0, width:10,height:10}), false, "isOnEdge({-10,-10}, {10,10})");
+        equals(LineUtils.isOnEdge({x:-10, y:0}, {x:0,y:0, width:10,height:10}), false, "isOnEdge({-10,0}, {10,10})");
+        equals(LineUtils.isOnEdge({x:0, y:-10}, {x:0,y:0, width:10,height:10}), false, "isOnEdge({0,-10}, {10,10})");
+        equals(LineUtils.isOnEdge({x:20, y:20}, {x:0,y:0, width:10,height:10}), false, "isOnEdge({20,20}, {10,10})");
+        equals(LineUtils.isOnEdge({x:20, y:0}, {x:0,y:0, width:10,height:10}), false, "isOnEdge({20,0}, {10,10})");
+        equals(LineUtils.isOnEdge({x:0, y:20}, {x:0,y:0, width:10,height:10}), false, "isOnEdge({0,20}, {10,10})");
+
+        equals(LineUtils.isOnEdge({x:0, y:0}, {x:0,y:0, width:"10%",height:"10%"}), true, "isOnEdge({0,0}, {10%,10%})");
+        equals(LineUtils.isOnEdge({x:"1%", y:"1%"}, {x:0,y:0, width:"10%",height:"10%"}), false, "isOnEdge({1%,1%}, {10%,10%})");
+        equals(LineUtils.isOnEdge({x:"1%", y:0}, {x:0,y:0, width:"10%",height:"10%"}), true, "isOnEdge({1%,0}, {10%,10%})");
+        equals(LineUtils.isOnEdge({x:0, y:"1%"}, {x:0,y:0, width:"10%",height:"10%"}), true, "isOnEdge({0,1%}, {10%,10%})");
+        equals(LineUtils.isOnEdge({x:"10%", y:"10%"}, {x:0,y:0, width:"10%",height:"10%"}), true, "isOnEdge({10%,1%0%}, {10%,10%})");
+        equals(LineUtils.isOnEdge({x:"10%", y:0}, {x:0,y:0, width:"10%",height:"10%"}), true, "isOnEdge({10%,0}, {10%,10%})");
+        equals(LineUtils.isOnEdge({x:0, y:"10%"}, {x:0,y:0, width:"10%",height:"10%"}), true, "isOnEdge({0,10%}, {10%,10%})");
+        equals(LineUtils.isOnEdge({x:"-10%", y:"-10%"}, {x:0,y:0, width:"10%",height:"10%"}), false, "isOnEdge({-10%,-10%}, {10%,10%})");
+        equals(LineUtils.isOnEdge({x:"-10%", y:0}, {x:0,y:0, width:"10%",height:"10%"}), false, "isOnEdge({-10%,0}, {10%,10%})");
+        equals(LineUtils.isOnEdge({x:0, y:"-10%"}, {x:0,y:0, width:"10%",height:"10%"}), false, "isOnEdge({0,-10%}, {10%,10%})");
+        equals(LineUtils.isOnEdge({x:"20%", y:"20%"}, {x:0,y:0, width:"10%",height:"10%"}), false, "isOnEdge({20%,20%}, {10%,10%})");
+        equals(LineUtils.isOnEdge({x:"20%", y:0}, {x:0,y:0, width:"10%",height:"10%"}), false, "isOnEdge({20%,0}, {10%,10%})");
+        equals(LineUtils.isOnEdge({x:0, y:"20%"}, {x:0,y:0, width:"10%",height:"10%"}), false, "isOnEdge({0,20%}, {10%,10%})");
+
+        deepEqual(LineUtils.isOnEdge({x:"1%", y:0}, {x:0, y:1, width:10,height:10}), NaN, "isOnEdge({1%,0}, {0,1})");
+    });
+
     test("lineIntercepts", function() {
         expect(27);
 
