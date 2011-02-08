@@ -178,6 +178,90 @@ LineUtils = {
     },
 
     /**
+     * Calculates the gradient start and end points as defined by http://dev.w3.org/csswg/css3-images/#linear-gradients
+     * as well as the color stop adjustment values to fix the color stops to an centroid angle gradient.
+     */
+    gradientPoints: function(start, end, container) {
+        // Check that the units match
+        var unit = 0;
+        unit = checkUnit(unit, start.x);
+        unit = checkUnit(unit, start.y);
+        unit = checkUnit(unit, end.x);
+        unit = checkUnit(unit, end.y);
+        unit = checkUnit(unit, container.x);
+        unit = checkUnit(unit, container.y);
+        unit = checkUnit(unit, container.width);
+        unit = checkUnit(unit, container.height);
+        if (unit === false) {
+            return NaN;
+        }
+
+        start = {x: parseFloat(start.x), y: parseFloat(start.y)};
+        end = {x: parseFloat(end.x), y: parseFloat(end.y)};
+        container = {
+            x: parseFloat(container.x), y: parseFloat(container.y),
+            width: parseFloat(container.width), height: parseFloat(container.height)
+        };
+
+        var rise = end.y-start.y,
+            run = end.x-start.x,
+            slope = rise/run,
+            perpendicularSlope = -1/slope,
+
+            top = container.y,
+            bottom = container.y + container.height,
+            left = container.x,
+            right = container.x + container.width,
+            center = {x: container.x + container.width/2, y: container.y + container.height/2},
+
+            startCorner, endCorner, passedCornerIntercept, totalDist;
+
+        function findLineIntersect(point1, slope1, point2, slope2) {
+            var retX = (point1.y - point2.y + slope2*point2.x - slope1*point1.x)/(slope2 - slope1);
+            return {
+                x: retX,
+                y: slope1*(retX - point1.x) + point1.y
+            };
+        }
+
+        // Special case the vertical and horizontal as they or their perpendicular have the lil divide by zero concern
+        if (!run) {
+            startCorner = {x: center.x, y: end.y<start.y?bottom:top};
+            endCorner = {x: center.x, y: end.y>start.y?bottom:top};
+            passedCornerIntercept = {x: start.x, y: startCorner.y};
+        } else if (!rise) {
+            // Corners are the vertical intercepts
+            startCorner = {x: end.x<start.x?right:left, y: center.y};
+            endCorner = {x: end.x>start.x?right:left, y: center.y};
+            passedCornerIntercept = {x: startCorner.x, y: start.y};
+        } else if (slope < 0) {
+            // The corners are (0,h) and (w,0)
+            var topRight = findLineIntersect({x:right, y:top}, perpendicularSlope, center, slope),
+                bottomLeft = findLineIntersect({x:left, y:bottom}, perpendicularSlope, center, slope);
+
+            startCorner = run < 0 ? topRight : bottomLeft;
+            endCorner = run < 0 ? bottomLeft : topRight;
+            passedCornerIntercept = findLineIntersect(start, slope, startCorner, perpendicularSlope);
+        } else {
+            // The corners are (0,0) and bottom (w,h)
+            var topLeft = findLineIntersect({x:left, y:top}, perpendicularSlope, center, slope),
+                bottomRight = findLineIntersect({x:right, y:bottom}, perpendicularSlope, center, slope);
+
+            startCorner = run < 0 ? bottomRight : topLeft;
+            endCorner = run < 0 ? topLeft : bottomRight;
+            passedCornerIntercept = findLineIntersect(start, slope, startCorner, perpendicularSlope);
+        }
+
+        totalDist = LineUtils.distance(startCorner, endCorner);
+        return {
+            start: {x: combineUnit(startCorner.x, unit), y: combineUnit(startCorner.y, unit)},
+            startOff: LineUtils.distance(passedCornerIntercept, start)/totalDist,
+            end: {x: combineUnit(endCorner.x, unit), y: combineUnit(endCorner.y, unit)},
+            scale: LineUtils.distance(start, end)/totalDist
+        };
+    },
+
+    /**
      * Determines the two points at which the line connecting start and end intersects with the container
      * boundaries.
      */

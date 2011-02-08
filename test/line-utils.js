@@ -172,6 +172,89 @@ $(document).ready(function(){
         deepEqual(LineUtils.isOnEdge({x:"1%", y:0}, {x:0, y:1, width:10,height:10}), NaN, "isOnEdge({1%,0}, {0,1})");
     });
 
+    test("gradientPoints", function() {
+        expect(17);
+
+        deepEqual(
+            LineUtils.gradientPoints({x:0, y:0}, {x:0, y:1}, {x:0,y:0, width:1,height:1}),
+            {start: {x:0.5, y:0}, startOff: 0, end: {x:0.5, y:1}, scale: 1},
+            "gradientPoints({0,0}, {0,1}, {0,0,1,1})");
+        deepEqual(
+            LineUtils.gradientPoints({x:0, y:0}, {x:1, y:0}, {x:0,y:0, width:1,height:1}),
+            {start: {x:0, y:0.5}, startOff: 0, end: {x:1, y:0.5}, scale: 1},
+            "gradientPoints({0,0}, {1,0}, {0,0,1,1})");
+        deepEqual(
+            LineUtils.gradientPoints({x:0, y:0}, {x:1, y:1}, {x:0,y:0, width:1,height:1}),
+            {start: {x:0, y:0}, startOff: 0, end: {x:1, y:1}, scale: 1},
+            "gradientPoints({0,0}, {1,1}, {0,0,1,1})");
+        deepEqual(
+            LineUtils.gradientPoints({x:1, y:1}, {x:0, y:0}, {x:0,y:0, width:1,height:1}),
+            {start: {x:1, y:1}, startOff: 0, end: {x:0, y:0}, scale: 1},
+            "gradientPoints({1,1}, {0,0}, {0,0,1,1})");
+        deepEqual(
+            LineUtils.gradientPoints({x:1, y:0}, {x:0, y:1}, {x:0,y:0, width:1,height:1}),
+            {start: {x:1, y:0}, startOff: 0, end: {x:0, y:1}, scale: 1},
+            "gradientPoints({1,0}, {0,1}, {0,0,1,1})");
+        deepEqual(
+            LineUtils.gradientPoints({x:0, y:1}, {x:1, y:0}, {x:0,y:0, width:1,height:1}),
+            {start: {x:0, y:1}, startOff: 0, end: {x:1, y:0}, scale: 1},
+            "gradientPoints({0,1}, {1,0}, {0,0,1,1})");
+
+        // No intercepts
+        deepEqual(
+            LineUtils.gradientPoints({x:0, y:10}, {x:10, y:10}, {x:0,y:0, width:1,height:1}),
+            {start: {x:0,y:0.5}, startOff: 0, end: {x:1,y:0.5}, scale: 10},
+            "gradientPoints({0,10}, {10,10}, {0,0,1,1})");
+        deepEqual(
+            LineUtils.gradientPoints({x:10, y:0}, {x:10, y:10}, {x:0,y:0, width:1,height:1}),
+            {start: {x:0.5,y:0}, startOff: 0, end: {x:0.5,y:1}, scale: 10},
+            "gradientPoints({10,0}, {10,10}, {0,0,1,1})");
+
+        // Not connected to the edge cases
+        deepEqual(
+            LineUtils.gradientPoints({x:1, y:2}, {x:2, y:3}, {x:0,y:0, width:10,height:10}),
+            {start: {x:0, y:0}, startOff: 0.15, end: {x:10, y:10}, scale: 0.1},
+            "gradientPoints({1,2}, {2,3}, {0,0,10,10})");
+        deepEqual(
+            LineUtils.gradientPoints({x:2, y:3}, {x:1, y:2}, {x:0,y:0, width:10,height:10}),
+            {start: {x:10, y:10}, startOff: 0.75, end: {x:0, y:0}, scale: 0.1},
+            "gradientPoints({2,3}, {1,2}, {0,0,10,10})");
+
+        deepEqual(
+            LineUtils.gradientPoints({x:9, y:1}, {x:8, y:2}, {x:0,y:0, width:10,height:10}),
+            {start: {x:10, y:0}, startOff: 0.1, end: {x:0, y:10}, scale: 0.1},
+            "gradientPoints({9,1}, {8,2}, {0,0,10,10})");
+        deepEqual(
+            LineUtils.gradientPoints({x:8, y:2}, {x:9, y:1}, {x:0,y:0, width:10,height:10}),
+            {start: {x:0, y:10}, startOff: 0.8, end: {x:10, y:0}, scale: 0.1},
+            "gradientPoints({2,8}, {9,1}, {0,0,10,10})");
+
+        deepEqual(
+            LineUtils.gradientPoints({x:9, y:1}, {x:8, y:2}, {x:-1,y:-1, width:11,height:11}),
+            {start: {x:10, y:-1}, startOff: 0.13636363636363635, end: {x:-1, y:10}, scale: 0.09090909090909091},
+            "gradientPoints({9,1}, {8,2}, {-1,-1,11,11})");
+        deepEqual(
+            LineUtils.gradientPoints({x:8, y:2}, {x:9, y:1}, {x:-1,y:-1, width:11,height:11}),
+            {start: {x:-1, y:10}, startOff: 0.7727272727272727, end: {x:10, y:-1}, scale: 0.09090909090909091},
+            "gradientPoints({2,8}, {9,1}, {-1,-1,11,11})");
+
+        // Units
+        deepEqual(
+            LineUtils.gradientPoints({x:0, y:0}, {x:0, y:"1%"}, {x:0,y:0, width:"1%",height:"1%"}),
+            {start: {x:"0.5%", y:0}, startOff: 0, end: {x:"0.5%", y:"1%"}, scale: 1},
+            "gradientPoints({0,0}, {0,1%}, {0,0,1%,1%})");
+        deepEqual(
+            LineUtils.gradientPoints({x:0, y:0}, {x:"1%", y:"1%"}, {x:0,y:0, width:"1%",height:"1%"}),
+            {start: {x:0, y:0}, startOff: 0, end: {x:"1%", y:"1%"}, scale: 1},
+            "gradientPoints({0,0}, {1%,1%}, {0,0,1%,1%})");
+        deepEqual(
+            LineUtils.gradientPoints({x:0, y:0}, {x:0, y:"1%"}, {x:0,y:0, width:1,height:1}),
+            NaN,
+            "gradientPoints({0,0}, {0,1%}, {0,0,1,1})");
+
+        // TODO : Angles that resolve to something other than a direct corner
+    });
+
     test("lineIntercepts", function() {
         expect(29);
 
