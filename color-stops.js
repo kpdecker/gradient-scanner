@@ -233,8 +233,29 @@ var ColorStops = {};
                 x:0,
                 y:0,
                 width:Math.max(parseInt(dragStart.x, 10), parseInt(dragEnd.x, 10)) + (LineUtils.getUnit(dragStart.x) || LineUtils.getUnit(dragEnd.x) || 0),
-                height:Math.max(parseInt(dragStart.x, 10), parseInt(dragEnd.x, 10)) + (LineUtils.getUnit(dragStart.y) || LineUtils.getUnit(dragEnd.y) || 0)
+                height:Math.max(parseInt(dragStart.y, 10), parseInt(dragEnd.y, 10)) + (LineUtils.getUnit(dragStart.y) || LineUtils.getUnit(dragEnd.y) || 0)
             };
+        }
+    }
+
+    function newGenerator(prefix, type, dragStart, dragEnd, colorStops, container) {
+        container = container || generateContainer(dragStart, dragEnd);
+
+        var gradientPoints = LineUtils.gradientPoints(dragStart, dragEnd, container),
+            stopCSS = colorStops.map(function(stop) {
+                return ColorStops.getColorValue(stop.color) + " " + Math.floor((gradientPoints.startOff + stop.position*gradientPoints.scale) * 1000)/10 + "%";
+            }).join(", "),
+
+            angle = 360-LineUtils.radsToDegrees(LineUtils.slopeInRads(dragStart, dragEnd)),
+            point = !LineUtils.isOnEdge(dragStart, container) ? formatUnit(dragStart.x) + " " + formatUnit(dragStart.y) : "";
+
+        // Generate the position component if necessary
+        var position = (angle !== 270 ? angle + "deg" : "");
+        position = position + (position && ", ");
+
+        if (type === "linear") {
+            return "-" + prefix + "-linear-gradient(" + position + stopCSS + ")";
+        } else if (type === "radial") {
         }
     }
     var cssGenerators = {
@@ -253,27 +274,11 @@ var ColorStops = {};
 
             return "-webkit-gradient(" + type + ", " + points + ", " + stopCSS + ")";
         },
+        webkitNew: function(type, dragStart, dragEnd, colorStops, container) {
+            return newGenerator("webkit", type, dragStart, dragEnd, colorStops, container);
+        },
         mozilla: function(type, dragStart, dragEnd, colorStops, container) {
-            // TODO : Optimize this for equally spaced cases
-
-            var tailAdjust = LineUtils.percentageOfRay(dragStart, dragEnd, container||generateContainer(dragStart, dragEnd)),
-                stopCSS = colorStops.map(function(stop) {
-                    return ColorStops.getColorValue(stop.color) + " " + Math.floor(stop.position * tailAdjust * 1000)/10 + "%";
-                }).join(", "),
-
-                angle = 360-LineUtils.radsToDegrees(LineUtils.slopeInRads(dragStart, dragEnd)),
-                point = dragStart.x || dragStart.y ? formatUnit(dragStart.x) + " " + formatUnit(dragStart.y) : "";
-
-            // Generate the position component if necessary
-            var position = point + (angle !== 270 ? (point && " ") + angle + "deg" : "");
-            position = position + (position && ", ");
-
-            if (type === "linear") {
-                // TODO : Figure out what the angle is from the two provided coordinates
-                return "-moz-linear-gradient(" + position + stopCSS + ")";
-            } else if (type === "radial") {
-                // TODO : Lets do this
-            }
+            return newGenerator("moz", type, dragStart, dragEnd, colorStops, container);
         }
     };
 
