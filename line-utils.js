@@ -57,7 +57,7 @@ LineUtils = {
         }
 
         // Remove any units, we'll restore them later
-        start = {x: parseFloat(start.x), y: parseInt(start.y)};
+        start = {x: parseFloat(start.x), y: parseFloat(start.y)};
         end = {x: parseFloat(end.x), y: parseFloat(end.y)};
         width = parseFloat(width);
 
