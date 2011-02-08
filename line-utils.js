@@ -11,7 +11,7 @@ function getUnit(value) {
         return value ? "px" : 0;
     }
 
-    if (parseFloat(value, 10) === 0) {
+    if (parseFloat(value) === 0) {
         return 0;
     }
     return (/\d+(?:\.\d+)?(.*)/).exec(value)[1] || "px";
@@ -57,9 +57,9 @@ LineUtils = {
         }
 
         // Remove any units, we'll restore them later
-        start = {x: parseInt(start.x, 10), y: parseInt(start.y, 10)};
-        end = {x: parseInt(end.x, 10), y: parseInt(end.y, 10)};
-        width = parseInt(width, 10);
+        start = {x: parseFloat(start.x), y: parseInt(start.y)};
+        end = {x: parseFloat(end.x), y: parseFloat(end.y)};
+        width = parseFloat(width);
 
         var topLeft = {x: Math.min(start.x, end.x), y: Math.min(start.y, end.y)},
             bottomRight = {x: Math.max(start.x, end.x), y: Math.max(start.y, end.y)};
@@ -96,8 +96,8 @@ LineUtils = {
         }
 
         return {
-            x: combineUnit(parseInt(coord.x, 10)-parseInt(origin.x, 10), unit),
-            y: combineUnit(parseInt(coord.y, 10)-parseInt(origin.y, 10), unit)
+            x: combineUnit(parseFloat(coord.x)-parseFloat(origin.x), unit),
+            y: combineUnit(parseFloat(coord.y)-parseFloat(origin.y), unit)
         };
     },
 
@@ -117,7 +117,7 @@ LineUtils = {
             return NaN;
         }
 
-        return Math.sqrt(Math.pow(parseInt(end.y, 10)-parseInt(start.y, 10),2) + Math.pow(parseInt(end.x, 10)-parseInt(start.x, 10), 2));
+        return Math.sqrt(Math.pow(parseFloat(end.y)-parseFloat(start.y),2) + Math.pow(parseFloat(end.x)-parseFloat(start.x), 2));
     },
 
     /**
@@ -162,10 +162,10 @@ LineUtils = {
             return NaN;
         }
 
-        point = {x: parseInt(point.x, 10), y: parseInt(point.y, 10)};
+        point = {x: parseFloat(point.x), y: parseFloat(point.y)};
         container = {
-            x: parseInt(container.x, 10), y: parseInt(container.y, 10),
-            width: parseInt(container.width, 10), height: parseInt(container.height, 10)
+            x: parseFloat(container.x), y: parseFloat(container.y),
+            width: parseFloat(container.width), height: parseFloat(container.height)
         };
 
         if (point.x === container.x || point.x === container.x+container.width) {
@@ -196,11 +196,11 @@ LineUtils = {
             return NaN;
         }
 
-        start = {x: parseInt(start.x, 10), y: parseInt(start.y, 10)};
-        end = {x: parseInt(end.x, 10), y: parseInt(end.y, 10)};
+        start = {x: parseFloat(start.x), y: parseFloat(start.y)};
+        end = {x: parseFloat(end.x), y: parseFloat(end.y)};
         container = {
-            x: parseInt(container.x, 10), y: parseInt(container.y, 10),
-            width: parseInt(container.width, 10), height: parseInt(container.height, 10)
+            x: parseFloat(container.x), y: parseFloat(container.y),
+            width: parseFloat(container.width), height: parseFloat(container.height)
         };
 
         var rise = end.y-start.y,
@@ -295,8 +295,8 @@ LineUtils = {
             return NaN;
         }
 
-        var rise = parseInt(end.y, 10)-parseInt(start.y, 10),
-            run = parseInt(end.x, 10)-parseInt(start.x, 10);
+        var rise = parseFloat(end.y)-parseFloat(start.y),
+            run = parseFloat(end.x)-parseFloat(start.x);
         return (run<0 ? Math.PI : (rise<0 ? 2*Math.PI : 0)) + (run ? Math.atan(rise/run) : (rise<0?-1:1)*Math.PI/2);
     },
     radsToDegrees: function(rads) {

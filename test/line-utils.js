@@ -29,7 +29,7 @@ $(document).ready(function(){
     });
 
     test("containingRect", function() {
-        expect(26);
+        expect(27);
         deepEqual(LineUtils.containingRect({x:0, y:0}, {x:0, y:1}), {x:0,y:0, width:1,height:1}, "containingRect({0,0}, {0,1})");
         deepEqual(LineUtils.containingRect({x:0, y:0}, {x:1, y:0}), {x:0,y:0, width:1,height:1}, "containingRect({0,0}, {1,0})");
         deepEqual(LineUtils.containingRect({x:0, y:0}, {x:1, y:1}), {x:0,y:0, width:1,height:1}, "containingRect({0,0}, {1,1})");
@@ -58,15 +58,19 @@ $(document).ready(function(){
         deepEqual(LineUtils.containingRect({x:"10%", y:0}, {x:0, y:"10%"}, "10%"), {x:"-3%",y:"-3%", width:"16%",height:"16%"}, "containingRect({10%,0}, {0,10%}, 10%)");
         deepEqual(LineUtils.containingRect({x:0, y:"10%"}, {x:"10%", y:0}, "10%"), {x:"-3%",y:"-3%", width:"16%",height:"16%"}, "containingRect({0,10%}, {10%,0}, 10%)");
 
+        deepEqual(LineUtils.containingRect({x:0, y:0}, {x:0, y:1.5}), {x:0,y:0, width:1,height:1.5}, "containingRect({0,0}, {0,1.5})");
+
         deepEqual(LineUtils.containingRect({x:"1%", y:0}, {x:0, y:1}), NaN, "containingRect({1%,0}, {0,1})");
         deepEqual(LineUtils.containingRect({x:"1%", y:0}, {x:0, y:"1%"}, 1), NaN, "containingRect({1%,0}, {0,1%}, 1)");
     });
 
     test("relativeCoords", function() {
-        expect(6);
+        expect(7);
         deepEqual(LineUtils.relativeCoords({x:0, y:0}, {x:0, y:0}), {x:0,y:0}, "relativeCoords({0,0}, {0,0})");
         deepEqual(LineUtils.relativeCoords({x:0, y:0}, {x:1, y:1}), {x:-1,y:-1}, "relativeCoords({0,0}, {1,1})");
         deepEqual(LineUtils.relativeCoords({x:1, y:1}, {x:0, y:0}), {x:1,y:1}, "relativeCoords({1,1}, {0,0})");
+
+        deepEqual(LineUtils.relativeCoords({x:1, y:1}, {x:0.5, y:0.5}), {x:0.5,y:0.5}, "relativeCoords({1,1}, {0.5,0.5})");
 
         deepEqual(LineUtils.relativeCoords({x:0, y:0}, {x:"1%", y:"1%"}), {x:"-1%",y:"-1%"}, "relativeCoords({0,0}, {1%,1%})");
         deepEqual(LineUtils.relativeCoords({x:"1%", y:"1%"}, {x:0, y:0}), {x:"1%",y:"1%"}, "relativeCoords({1%,1%}, {0,0})");
@@ -76,7 +80,7 @@ $(document).ready(function(){
 
     test("distance", function() {
         // Testing conditional logic only, assuming that the math is correct
-        expect(13);
+        expect(14);
         equals(LineUtils.distance({x:0, y:0}, {x:2, y:0}), 2, "distance({0,0}, {2,0})");
         equals(LineUtils.distance({x:2, y:0}, {x:0, y:0}), 2, "distance({2,0}, {0,0})");
 
@@ -94,6 +98,8 @@ $(document).ready(function(){
 
         equals(LineUtils.distance({x:0, y:0}, {x:0, y:"1%"}), 1, "distance({0,0}, {0,1%})");
         equals(LineUtils.distance({x:0, y:"1%"}, {x:0, y:0}), 1, "distance({0,1%}, {0,0})");
+
+        equals(LineUtils.distance({x:0, y:2.5}, {x:0, y:0}), 2.5, "distance({0,2.5}, {0,0})");
 
         deepEqual(LineUtils.distance({x:"1%", y:"1%"}, {x:1, y:0}), NaN, "distance({1%,1%}, {1,0})");
     });
@@ -130,7 +136,7 @@ $(document).ready(function(){
 
 
     test("isOnEdge", function() {
-        expect(27);
+        expect(29);
 
         equals(LineUtils.isOnEdge({x:0, y:0}, {x:0,y:0, width:10,height:10}), true, "isOnEdge({0,0}, {10,10})");
         equals(LineUtils.isOnEdge({x:1, y:1}, {x:0,y:0, width:10,height:10}), false, "isOnEdge({1,1}, {10,10})");
@@ -160,11 +166,14 @@ $(document).ready(function(){
         equals(LineUtils.isOnEdge({x:"20%", y:0}, {x:0,y:0, width:"10%",height:"10%"}), false, "isOnEdge({20%,0}, {10%,10%})");
         equals(LineUtils.isOnEdge({x:0, y:"20%"}, {x:0,y:0, width:"10%",height:"10%"}), false, "isOnEdge({0,20%}, {10%,10%})");
 
+        equals(LineUtils.isOnEdge({x:10.5, y:10.5}, {x:0,y:0, width:10.5,height:10.5}), true, "isOnEdge({10.5,10.5}, {10.5,10.5})");
+        equals(LineUtils.isOnEdge({x:1.5, y:1.5}, {x:0,y:0, width:10.5,height:10.5}), false, "isOnEdge({1.5,1.5}, {10.5,10.5})");
+
         deepEqual(LineUtils.isOnEdge({x:"1%", y:0}, {x:0, y:1, width:10,height:10}), NaN, "isOnEdge({1%,0}, {0,1})");
     });
 
     test("lineIntercepts", function() {
-        expect(27);
+        expect(29);
 
         deepEqual(LineUtils.lineIntercepts({x:0, y:0}, {x:0, y:1}, {x:0,y:0, width:1,height:1}), [{x:0, y:0}, {x:0, y:1}], "lineIntercepts({0,0}, {0,1}, {0,0,1,1})");
         deepEqual(LineUtils.lineIntercepts({x:0, y:0}, {x:1, y:0}, {x:0,y:0, width:1,height:1}), [{x:0, y:0}, {x:1, y:0}], "lineIntercepts({0,0}, {1,0}, {0,0,1,1})");
@@ -201,6 +210,10 @@ $(document).ready(function(){
         deepEqual(LineUtils.lineIntercepts({x:9, y:1}, {x:8, y:2}, {x:0,y:0, width:10,height:10}, true), [{x:0, y:10}], "lineIntercepts({9,1}, {8,2}, {0,0,10,10}, true)");
         deepEqual(LineUtils.lineIntercepts({x:8, y:2}, {x:9, y:1}, {x:0,y:0, width:10,height:10}, true), [{x:10, y:0}], "lineIntercepts({2,8}, {9,1}, {0,0,10,10}, true)");
 
+        // Percents
+        deepEqual(LineUtils.lineIntercepts({x:0, y:0}, {x:0, y:"1.5%"}, {x:0,y:0, width:"1.5%",height:"1.5%"}), [{x:0, y:0}, {x:0, y:"1.5%"}], "lineIntercepts({0,0}, {0,1.5%}, {0,0,1.5%,1.5%})");
+        deepEqual(LineUtils.lineIntercepts({x:0, y:0}, {x:"1.5%", y:"1.5%"}, {x:0,y:0, width:"1.5%",height:"1.5%"}), [{x:0, y:0}, {x:"1.5%", y:"1.5%"}], "lineIntercepts({0,0}, {1.5%,1.5%}, {0,0,1.5%,1.5%})");
+
         // Units
         deepEqual(LineUtils.lineIntercepts({x:0, y:0}, {x:0, y:"1%"}, {x:0,y:0, width:"1%",height:"1%"}), [{x:0, y:0}, {x:0, y:"1%"}], "lineIntercepts({0,0}, {0,1%}, {0,0,1%,1%})");
         deepEqual(LineUtils.lineIntercepts({x:0, y:0}, {x:"1%", y:"1%"}, {x:0,y:0, width:"1%",height:"1%"}), [{x:0, y:0}, {x:"1%", y:"1%"}], "lineIntercepts({0,0}, {1%,1%}, {0,0,1%,1%})");
@@ -209,7 +222,7 @@ $(document).ready(function(){
 
     test("slopeInRads", function() {
         // Testing conditional logic only, assuming that the math is correct
-        expect(13);
+        expect(19);
         equals(LineUtils.slopeInRads({x:0, y:0}, {x:1, y:0}), 0, "slopeInRads({0,0}, {1,0})");
         equals(LineUtils.slopeInRads({x:1, y:0}, {x:0, y:0}), Math.PI, "slopeInRads({1,0}, {0,0})");
 
@@ -227,6 +240,15 @@ $(document).ready(function(){
 
         equals(LineUtils.slopeInRads({x:0, y:0}, {x:"1%", y:"1%"}), Math.PI/4, "slopeInRads({0,0}, {1%,1%})");
         equals(LineUtils.slopeInRads({x:"1%", y:"1%"}, {x:0, y:0}), 5*Math.PI/4, "slopeInRads({1%,1%}, {0,0})");
+
+        equals(LineUtils.slopeInRads({x:0, y:0}, {x:1.5, y:0}), 0, "slopeInRads({0,0}, {1.5,0})");
+        equals(LineUtils.slopeInRads({x:1.5, y:0}, {x:0, y:0}), Math.PI, "slopeInRads({1.5,0}, {0,0})");
+
+        equals(LineUtils.slopeInRads({x:0, y:0}, {x:0, y:1.5}), Math.PI/2, "slopeInRads({0,0}, {0,1.5})");
+        equals(LineUtils.slopeInRads({x:0, y:1.5}, {x:0, y:0}), 3*Math.PI/2, "slopeInRads({0,1.5}, {0,0})");
+
+        equals(LineUtils.slopeInRads({x:0, y:0}, {x:1.5, y:1.5}), Math.PI/4, "slopeInRads({0,0}, {1.5,1.5})");
+        equals(LineUtils.slopeInRads({x:1.5, y:1.5}, {x:0, y:0}), 5*Math.PI/4, "slopeInRads({1.5,1.5}, {0,0})");
 
         deepEqual(LineUtils.slopeInRads({x:"1%", y:"1%"}, {x:1, y:0}), NaN, "slopeInRads({1%,1%}, {1,0})");
     });
