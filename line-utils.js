@@ -7,10 +7,14 @@ var LineUtils;
 (function() {
 
 function getUnit(value) {
-    if (parseInt(value, 10) === 0) {
+    if (typeof value === "number") {
+        return value ? "px" : 0;
+    }
+
+    if (parseFloat(value, 10) === 0) {
         return 0;
     }
-    return (/\d+(.*)/).exec(value)[1] || "px";
+    return (/\d+(?:\.\d+)?(.*)/).exec(value)[1] || "px";
 }
 function checkUnit(unit, value) {
     var newUnit = getUnit(value);
