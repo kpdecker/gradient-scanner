@@ -21,7 +21,7 @@ $(document).ready(function(){
     });
 
     test("generateCSS", function() {
-        expect(22);
+        expect(24);
         var redToBlue = [
                 {position: 0, color: [255, 0, 0, 255]},
                 {position: 0.5, color: [255, 0, 255, 255], disabled: true},
@@ -36,8 +36,8 @@ $(document).ready(function(){
         // Colorstop Generation Tests
         deepEqual(ColorStops.generateCSS("linear", {x:0, y:0}, {x:0, y:"100%"}, redToBlue), [
             "-webkit-gradient(linear, 0 0, 0 100%, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
-            "-webkit-linear-gradient(rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)",
-            "-moz-linear-gradient(rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)"
+            "-webkit-linear-gradient(rgb(255, 0, 0), rgb(0, 0, 255))",
+            "-moz-linear-gradient(rgb(255, 0, 0), rgb(0, 0, 255))"
         ], "generateCSS(linear, {0,0}, {0,100%}, redToBlue)");
 
         deepEqual(ColorStops.generateCSS("linear", {x:0, y:0}, {x:0, y:"100%"}, steppedRedToBlue), [
@@ -49,30 +49,30 @@ $(document).ready(function(){
         // Position and angle Tests
         deepEqual(ColorStops.generateCSS("linear", {x:0, y:"100%"}, {x:0, y:0}, redToBlue), [
             "-webkit-gradient(linear, 0 100%, 0 0, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
-            "-webkit-linear-gradient(90deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)",
-            "-moz-linear-gradient(90deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)"
+            "-webkit-linear-gradient(90deg, rgb(255, 0, 0), rgb(0, 0, 255))",
+            "-moz-linear-gradient(90deg, rgb(255, 0, 0), rgb(0, 0, 255))"
         ], "generateCSS(linear, {0,100%}, {0,0}, redToBlue)");
 
         deepEqual(ColorStops.generateCSS("linear", {x:0, y:0}, {x:"100%", y:0}, redToBlue), [
             "-webkit-gradient(linear, 0 0, 100% 0, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
-            "-webkit-linear-gradient(360deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)",
-            "-moz-linear-gradient(360deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)"
+            "-webkit-linear-gradient(360deg, rgb(255, 0, 0), rgb(0, 0, 255))",
+            "-moz-linear-gradient(360deg, rgb(255, 0, 0), rgb(0, 0, 255))"
         ], "generateCSS(linear, {0,0}, {100%, 0}, redToBlue)");
         deepEqual(ColorStops.generateCSS("linear", {x:"100%", y:0}, {x:0, y:0}, redToBlue), [
             "-webkit-gradient(linear, 100% 0, 0 0, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
-            "-webkit-linear-gradient(180deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)",
-            "-moz-linear-gradient(180deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)"
+            "-webkit-linear-gradient(180deg, rgb(255, 0, 0), rgb(0, 0, 255))",
+            "-moz-linear-gradient(180deg, rgb(255, 0, 0), rgb(0, 0, 255))"
         ], "generateCSS(linear, {100%,0}, {0, 0}, redToBlue)");
 
         deepEqual(ColorStops.generateCSS("linear", {x:0, y:0}, {x:"100%", y:"100%"}, redToBlue), [
             "-webkit-gradient(linear, 0 0, 100% 100%, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
-            "-webkit-linear-gradient(315deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)",
-            "-moz-linear-gradient(315deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)"
+            "-webkit-linear-gradient(315deg, rgb(255, 0, 0), rgb(0, 0, 255))",
+            "-moz-linear-gradient(315deg, rgb(255, 0, 0), rgb(0, 0, 255))"
         ], "generateCSS(linear, {0,0}, {100%, 100%}, redToBlue)");
         deepEqual(ColorStops.generateCSS("linear", {x:"100%", y:"100%"}, {x:0, y:0}, redToBlue), [
             "-webkit-gradient(linear, 100% 100%, 0 0, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
-            "-webkit-linear-gradient(135deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)",
-            "-moz-linear-gradient(135deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 100%)"
+            "-webkit-linear-gradient(135deg, rgb(255, 0, 0), rgb(0, 0, 255))",
+            "-moz-linear-gradient(135deg, rgb(255, 0, 0), rgb(0, 0, 255))"
         ], "generateCSS(linear, {100%, 100%}, {0,0}, redToBlue)");
 
         // Positions that do not fill the entire region
@@ -126,23 +126,23 @@ $(document).ready(function(){
         // Non-percentage positions
         deepEqual(ColorStops.generateCSS("linear", {x:25, y:0}, {x:50, y:0}, redToBlue), [
             "-webkit-gradient(linear, 25 0, 50 0, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
-            "-webkit-linear-gradient(360deg, rgb(255, 0, 0) 50%, rgb(0, 0, 255) 100%)",
-            "-moz-linear-gradient(360deg, rgb(255, 0, 0) 50%, rgb(0, 0, 255) 100%)"
+            "-webkit-linear-gradient(360deg, rgb(255, 0, 0) 50%, rgb(0, 0, 255))",
+            "-moz-linear-gradient(360deg, rgb(255, 0, 0) 50%, rgb(0, 0, 255))"
         ], "generateCSS(linear, {25,0}, {50,0}, redToBlue)");
         deepEqual(ColorStops.generateCSS("linear", {x:0, y:25}, {x:0, y:50}, redToBlue), [
             "-webkit-gradient(linear, 0 25, 0 50, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
-            "-webkit-linear-gradient(rgb(255, 0, 0) 50%, rgb(0, 0, 255) 100%)",
-            "-moz-linear-gradient(rgb(255, 0, 0) 50%, rgb(0, 0, 255) 100%)"
+            "-webkit-linear-gradient(rgb(255, 0, 0) 50%, rgb(0, 0, 255))",
+            "-moz-linear-gradient(rgb(255, 0, 0) 50%, rgb(0, 0, 255))"
         ], "generateCSS(linear, {0,25}, {0,50}, redToBlue)");
         deepEqual(ColorStops.generateCSS("linear", {x:25, y:25}, {x:50, y:50}, redToBlue), [
             "-webkit-gradient(linear, 25 25, 50 50, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
-            "-webkit-linear-gradient(315deg, rgb(255, 0, 0) 50%, rgb(0, 0, 255) 100%)",
-            "-moz-linear-gradient(315deg, rgb(255, 0, 0) 50%, rgb(0, 0, 255) 100%)"
+            "-webkit-linear-gradient(315deg, rgb(255, 0, 0) 50%, rgb(0, 0, 255))",
+            "-moz-linear-gradient(315deg, rgb(255, 0, 0) 50%, rgb(0, 0, 255))"
         ], "generateCSS(linear, {25,25}, {50,50}, redToBlue)");
         deepEqual(ColorStops.generateCSS("linear", {x:50, y:50}, {x:25, y:25}, redToBlue), [
             "-webkit-gradient(linear, 50 50, 25 25, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
-            "-webkit-linear-gradient(135deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 50%)",
-            "-moz-linear-gradient(135deg, rgb(255, 0, 0) 0%, rgb(0, 0, 255) 50%)"
+            "-webkit-linear-gradient(135deg, rgb(255, 0, 0), rgb(0, 0, 255) 50%)",
+            "-moz-linear-gradient(135deg, rgb(255, 0, 0), rgb(0, 0, 255) 50%)"
         ], "generateCSS(linear, {50,50}, {25,25}, redToBlue)");
         deepEqual(ColorStops.generateCSS("linear", {x:25, y:25}, {x:50, y:50}, redToBlue, {x:0,y:0, width:100,height:100}), [
             "-webkit-gradient(linear, 25 25, 50 50, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
@@ -157,8 +157,30 @@ $(document).ready(function(){
 
         deepEqual(ColorStops.generateCSS("linear", {x:25.25, y:0}, {x:50.5, y:0}, redToBlue), [
             "-webkit-gradient(linear, 25.25 0, 50.5 0, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
-            "-webkit-linear-gradient(360deg, rgb(255, 0, 0) 50%, rgb(0, 0, 255) 100%)",
-            "-moz-linear-gradient(360deg, rgb(255, 0, 0) 50%, rgb(0, 0, 255) 100%)"
+            "-webkit-linear-gradient(360deg, rgb(255, 0, 0) 50%, rgb(0, 0, 255))",
+            "-moz-linear-gradient(360deg, rgb(255, 0, 0) 50%, rgb(0, 0, 255))"
         ], "generateCSS(linear, {25.25,0}, {50.5,0}, redToBlue)");
+
+        // Position spacing
+        var equallySpaced = [
+                {position: 0, color: [255, 0, 0, 255]},
+                {position: 0.5, color: [255, 0, 255, 255]},
+                {position: 1, color: [0, 0, 255, 255]}
+            ],
+            notEquallySpaced = [
+                {position: 0, color: [255, 0, 0, 255]},
+                {position: 0.5, color: [255, 0, 255, 255]},
+                {position: 0.75, color: [0, 0, 255, 255]}
+            ];
+        deepEqual(ColorStops.generateCSS("linear", {x:0, y:0}, {x:0, y:"100%"}, equallySpaced), [
+            "-webkit-gradient(linear, 0 0, 0 100%, from(rgb(255, 0, 0)), color-stop(0.5, rgb(255, 0, 255)), to(rgb(0, 0, 255)))",
+            "-webkit-linear-gradient(rgb(255, 0, 0), rgb(255, 0, 255), rgb(0, 0, 255))",
+            "-moz-linear-gradient(rgb(255, 0, 0), rgb(255, 0, 255), rgb(0, 0, 255))"
+        ], "generateCSS(linear, {0,0}, {0,100%}, equallySpaced)");
+        deepEqual(ColorStops.generateCSS("linear", {x:0, y:0}, {x:0, y:"100%"}, notEquallySpaced), [
+            "-webkit-gradient(linear, 0 0, 0 100%, from(rgb(255, 0, 0)), color-stop(0.5, rgb(255, 0, 255)), color-stop(0.75, rgb(0, 0, 255)))",
+            "-webkit-linear-gradient(rgb(255, 0, 0), rgb(255, 0, 255) 50%, rgb(0, 0, 255) 75%)",
+            "-moz-linear-gradient(rgb(255, 0, 0), rgb(255, 0, 255) 50%, rgb(0, 0, 255) 75%)"
+        ], "generateCSS(linear, {0,0}, {0,100%}, notEquallySpaced)");
     });
 });
