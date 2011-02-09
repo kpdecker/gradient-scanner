@@ -21,7 +21,7 @@ $(document).ready(function(){
     });
 
     test("generateCSS", function() {
-        expect(21);
+        expect(22);
         var redToBlue = [
                 {position: 0, color: [255, 0, 0, 255]},
                 {position: 0.5, color: [255, 0, 255, 255], disabled: true},
@@ -154,5 +154,11 @@ $(document).ready(function(){
             "-webkit-linear-gradient(135deg, rgb(255, 0, 0) 50%, rgb(0, 0, 255) 75%)",
             "-moz-linear-gradient(135deg, rgb(255, 0, 0) 50%, rgb(0, 0, 255) 75%)"
         ], "generateCSS(linear, {50,50}, {25,25}, redToBlue, {0,0,100,100})");
+
+        deepEqual(ColorStops.generateCSS("linear", {x:25.25, y:0}, {x:50.5, y:0}, redToBlue), [
+            "-webkit-gradient(linear, 25.25px 0, 50.5px 0, from(rgb(255, 0, 0)), to(rgb(0, 0, 255)))",
+            "-webkit-linear-gradient(360deg, rgb(255, 0, 0) 50%, rgb(0, 0, 255) 100%)",
+            "-moz-linear-gradient(360deg, rgb(255, 0, 0) 50%, rgb(0, 0, 255) 100%)"
+        ], "generateCSS(linear, {25.25,0}, {50.5,0}, redToBlue)");
     });
 });

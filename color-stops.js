@@ -222,7 +222,7 @@ var ColorStops = {};
     };
 
     function formatUnit(value) {
-        return parseInt(value, 10) + (LineUtils.getUnit(value) || "");
+        return parseFloat(value) + (LineUtils.getUnit(value) || "");
     }
     function generateContainer(dragStart, dragEnd) {
         if (LineUtils.getUnit(dragStart.x) === "%" || LineUtils.getUnit(dragStart.y) === "%"
@@ -232,8 +232,8 @@ var ColorStops = {};
             return {
                 x:0,
                 y:0,
-                width:Math.max(parseInt(dragStart.x, 10), parseInt(dragEnd.x, 10)) + (LineUtils.getUnit(dragStart.x) || LineUtils.getUnit(dragEnd.x) || 0),
-                height:Math.max(parseInt(dragStart.y, 10), parseInt(dragEnd.y, 10)) + (LineUtils.getUnit(dragStart.y) || LineUtils.getUnit(dragEnd.y) || 0)
+                width:Math.max(parseFloat(dragStart.x), parseFloat(dragEnd.x)) + (LineUtils.getUnit(dragStart.x) || LineUtils.getUnit(dragEnd.x) || 0),
+                height:Math.max(parseFloat(dragStart.y), parseFloat(dragEnd.y)) + (LineUtils.getUnit(dragStart.y) || LineUtils.getUnit(dragEnd.y) || 0)
             };
         }
     }
