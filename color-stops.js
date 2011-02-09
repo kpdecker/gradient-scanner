@@ -215,7 +215,26 @@ var ColorStops = {};
     ColorStops.getColorValue = function(color) {
         color = color.map(Math.floor);
         if (color[3] === 255) {
-            return "rgb(" + color[0] + ", " + color[1] + ", " + color[2] + ")";
+            color.pop();
+
+            var hex = color.map(function(color) {
+                    var ret = color.toString(16);
+                    if (ret.length < 2) {
+                        ret = "0" + ret;
+                    }
+                    return ret;
+                }),
+                reduce = hex.every(function(color) {
+                    return color[0] === color[1];
+                });
+
+            if (reduce) {
+                hex = hex.map(function(color) {
+                    return color[0];
+                });
+            }
+
+            return "#" + hex.join("");
         } else {
             return "rgba(" + color.join(", ") + ")";
         }
