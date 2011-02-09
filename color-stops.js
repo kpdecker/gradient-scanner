@@ -221,9 +221,6 @@ var ColorStops = {};
         }
     };
 
-    function formatUnit(value) {
-        return parseFloat(value) + (LineUtils.getUnit(value) || "");
-    }
     function generateContainer(dragStart, dragEnd) {
         if (LineUtils.getUnit(dragStart.x) === "%" || LineUtils.getUnit(dragStart.y) === "%"
             || LineUtils.getUnit(dragEnd.x) === "%" || LineUtils.getUnit(dragEnd.y) === "%") {
@@ -239,6 +236,10 @@ var ColorStops = {};
     }
 
     function newGenerator(prefix, type, dragStart, dragEnd, colorStops, container) {
+        function formatUnit(value) {
+            return parseFloat(value) + (LineUtils.getUnit(value) || "");
+        }
+
         container = container || generateContainer(dragStart, dragEnd);
 
         var gradientPoints = LineUtils.gradientPoints(dragStart, dragEnd, container),
@@ -260,6 +261,14 @@ var ColorStops = {};
     }
     var cssGenerators = {
         webkitOld: function(type, dragStart, dragEnd, colorStops) {
+            function formatUnit(value) {
+                if (LineUtils.getUnit(value) === "%") {
+                    return parseFloat(value) + "%";
+                } else {
+                    return parseFloat(value);
+                }
+            }
+
             var stopCSS = colorStops.map(function(stop) {
                 if (!stop.position) {
                     return "from(" + ColorStops.getColorValue(stop.color) + ")";
