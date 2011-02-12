@@ -26,7 +26,7 @@ var ColorStops = {};
                 newDeriv[0] || oldDeriv[0],
                 newDeriv[1] || oldDeriv[1],
                 newDeriv[2] || oldDeriv[2],
-                newDeriv[3] || oldDeriv[3],
+                newDeriv[3] || oldDeriv[3]
             ];
     }
 
