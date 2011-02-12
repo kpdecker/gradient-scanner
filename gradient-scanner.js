@@ -97,15 +97,6 @@ $(document).ready(function() {
             var edgeSnap = ImageDataUtils.getSnapToTarget(edgeContext, dragStart, dragEnd);
             dragEnd = edgeSnap || dragEnd;
 
-            // Output debug info. To be removed after the UI is worked out
-            $("#lineInfo").text(""
-                + " dragStart: " + JSON.stringify(dragStart)
-                + " dragEnd: " + JSON.stringify(dragEnd)
-                + " deltaX: " + (dragEnd.x-dragStart.x)
-                + " deltaY: "+ (dragEnd.y-dragStart.y)
-                + " m: " + (dragEnd.y-dragStart.y)/(dragEnd.x-dragStart.x)
-            );
-
             // Collect the line data while the user is dragging
             imageData = ImageDataUtils.getLinePixels(context, dragStart, dragEnd);
             if (!imageData) {
