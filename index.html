@@ -11,27 +11,43 @@
     <link rel="stylesheet" type="text/css" href="css/gradient-scanner.css">
 </head>
 <body>
-    <div class="image-section">
-        <div class="image-display">
-            <canvas id="imageDisplay" width="600" height="600"></canvas>
-            <div id="lineOverlay"></div>
+    <div class="wrapper">
+        <div class="header">
+            <h1>gradient-scanner</h1>
         </div>
-    </div>
-    <div class="preview-section">
-        <div class="preview-frame" style="width: 600px; height: 600px;"><!-- Link this size to the image loader -->
-            <div class="preview-cell"></div>
+        <div class="content">
+            <div id="image-section" class="flow-section">
+                <h2>Select Image</h2>
+                <div class="image-display">
+                    <canvas id="imageDisplay" width="600" height="600"></canvas>
+                    <div id="lineOverlay"></div>
+                </div>
+                <img class="preview-component line-preview">
+            </div>
+            <div id="editor-section" class="flow-section">
+                <div class="gradient-preview">
+                    <img class="preview-component line-preview">
+                    <div id="gradientPreview" class="preview-component"></div>
+                </div>
+                <div class="delta-e-slider"></div>
+                <div id="colorStops" class="stops-list"></div>
+                <div id="stopCount"></div>
+            </div>
+            <div id="preview-section" class="flow-section">
+                <div class="preview-frame" style="width: 600px; height: 600px;"><!-- Link this size to the image loader -->
+                    <div class="preview-cell"></div>
+                </div>
+                <pre id="generatedCss"></pre>
+            </div>
         </div>
-        <pre id="generatedCss"></pre>
-    </div>
-    <hr>
-    <div class="editor-section">
-        <div class="gradient-preview">
-            <img id="linePreview" class="preview-component" src="data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=">
-            <div id="gradientPreview" class="preview-component"></div>
+
+        <div class="footer">
+            <button class="flow-prev">Prev</button>
+            <button class="flow-next">Next</button>
+            <div class="footer-link">
+                <a href="http://www.incaseofstairs.com/">incaseofstairs</a>
+            </div>
         </div>
-        <div class="delta-e-slider"></div>
-        <div id="colorStops" class="stops-list"></div>
-        <div id="stopCount"></div>
     </div>
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>

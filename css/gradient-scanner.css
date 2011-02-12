@@ -2,6 +2,83 @@
  * Copyright (c) 2011 Kevin Decker (http://www.incaseofstairs.com/)
  * See LICENSE for license information
  */
+/* General Page UI */
+body {
+    color: white;
+    background-color: #83ADC8;
+    font-size: 9pt;
+    font-family: trebuchet ms,arial,helvetica,sans-serif;
+    margin: 0;
+}
+.wrapper {
+    margin: 0px auto;
+    padding: 0;
+    background-color: #131F27;
+
+    width: 1000px;
+}
+.header {
+    background-color: black;
+    margin: 20px 0 0;
+}
+
+.wrapper,
+.wrapper > .header {
+    -moz-border-radius: 10px 10px 0px 0px;
+    -webkit-border-radius: 10px 10px 0px 0px;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.header > h1 {
+    display: inline-block;
+
+    margin: 0;
+    padding: 5px 15px;
+
+    font-size: 15pt;
+    font-weight: normal;
+    letter-spacing: -2px;
+}
+
+.content {
+    margin: 5px 15px;
+    overflow: hidden;
+}
+
+.footer {
+    background-color: black;
+    padding: 5px 10px;
+    clear: both;
+    overflow: auto;
+}
+.footer-link {
+    text-align: center;
+}
+.header > a,
+.footer > div > a {
+    color: #6598B8;
+}
+
+/* Flow */
+.flow-section {
+    display: none;
+}
+.flow-section.active {
+    display: block;
+}
+.flow-prev {
+    display: none;
+    float: left;
+}
+.flow-next {
+    display: none;
+    float: right;
+}
+.flow-prev.active,
+.flow-next.active {
+    display: block;
+}
+
 /* Line Overlay Components */
 .image-display {
     position: relative;
