@@ -73,6 +73,11 @@ $(document).ready(function() {
     });
 
     canvas.parent().mousedown(function(event) {
+        // Only activate this if the event is due to a left click
+        if (event.which !== 1) {
+            return;
+        }
+
         dragging = true;
         var canvasOffset = canvas.offset();
         dragStart = {x: event.pageX-canvasOffset.left, y: event.pageY-canvasOffset.top};

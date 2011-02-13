@@ -42,6 +42,8 @@ $(document).ready(function() {
         var offset = $("#imageDisplay").offset();
 
         var mousedown = jQuery.Event("mousedown");
+        mousedown.which = 1;
+
         mousedown.pageX = 189;
         mousedown.pageY = 503;
 
@@ -64,6 +66,8 @@ $(document).ready(function() {
         mousedown.pageY += offset.top;
 
         var mousemove = jQuery.Event("mousemove");
+        mousemove.which = 1;
+
         mousemove.pageX = 189;
         mousemove.pageY = 142;
 
