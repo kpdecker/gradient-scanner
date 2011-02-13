@@ -113,24 +113,24 @@ body {
 /* Focus Line Preview Components */
 .gradient-preview {
     display: inline-block;
-    width: 300px;
+    width: 500px;
 }
 
 .preview-component {
     display: block;
-    width: 600px;
+    width: 500px;
     height: 50px;
 }
 
 .delta-e-slider {
     margin: 5px 0;
-    width: 600px;
+    width: 500px;
 }
 
 /* Stop List */
 .stops-list {
     padding: 10px;
-    width: 600px;
+    width: 500px;
     height: 200px;
     overflow: auto;
 
