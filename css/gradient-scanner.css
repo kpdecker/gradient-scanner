@@ -129,7 +129,6 @@ body {
 
 /* Stop List */
 .stops-list {
-    padding: 10px;
     width: 500px;
     height: 200px;
     overflow: auto;
@@ -137,11 +136,15 @@ body {
     border: 1px solid #333;
 }
 .color-stop {
-    line-height: 25px;
-    padding-bottom: 5px;
+    padding: 5px 5px 0;
+    line-height: 30px;
 }
 .color-stop.disabled {
     opacity: 0.5;
+}
+.color-stop:hover {
+    background-color: #0AE;
+    cursor: pointer;
 }
 .color-preview {
     float: left;
