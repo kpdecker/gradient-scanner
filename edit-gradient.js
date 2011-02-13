@@ -16,7 +16,7 @@ $(document).ready(function() {
 
     var colorStops, editStop, deltaE = ColorStops.JND;
 
-    function renderStop(stop) {
+    function renderStop(stop, index) {
         var stopEl = $.tmpl("colorStopTemplate", {
             position: Math.floor(stop.position*1000)/10,
             colorCss: ColorStops.getColorValue(stop.color)
@@ -38,7 +38,7 @@ $(document).ready(function() {
         GradientScanner.colorStops = colorStops = ColorStops.extractColorStops(GradientScanner.line.imageData.data, deltaE);
 
         colorStops.forEach(function(stop, index) {
-            colorStopsEl.append(renderStop(stop));
+            colorStopsEl.append(renderStop(stop, index));
         });
 
         outputGradient();
@@ -85,13 +85,15 @@ $(document).ready(function() {
             });
 
             // Update the data model
+            curIndex += (growing?1:-1)*toUpdate.length;
             editStop.position = ui.value;
             colorStops.sort(function(a, b) { return a.position-b.position; });
 
             // Rerender the element for the updated state
-            var stopEl = renderStop(editStop);
+            var stopEl = renderStop(editStop, curIndex);
+            stopEl.addClass("editing");
             if (!toUpdate.length) {
-                editingEl.replaceWith(stopEl);
+                editingEl.after(stopEl);
             } else if (growing) {
                 toUpdate.last().after(stopEl);
             } else {
