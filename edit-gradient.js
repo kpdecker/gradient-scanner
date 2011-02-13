@@ -7,7 +7,7 @@
 $(document).ready(function() {
     $.template(
         "colorStopTemplate",
-        "<div class=\"color-stop\">"
+        "<div class=\"color-stop ${disabled}\">"
             + "<div class=\"color-preview\" style=\"background-color: ${colorCss}\"/>"
             + "${colorCss} ${position}%"
         + "</div>");
@@ -19,7 +19,8 @@ $(document).ready(function() {
     function renderStop(stop, index) {
         var stopEl = $.tmpl("colorStopTemplate", {
             position: Math.floor(stop.position*1000)/10,
-            colorCss: ColorStops.getColorValue(stop.color)
+            colorCss: ColorStops.getColorValue(stop.color),
+            disabled: stop.disabled ? "disabled" : ""
         });
         stopEl.data("stopIndex", index);
 
@@ -110,6 +111,15 @@ $(document).ready(function() {
         }
     });
 
+    $("#disableCheck").click(function() {
+        var el = $(this);
+        editStop.disabled = this.checked;
+        $(".color-stop.editing").toggleClass("disabled", editStop.disabled);
+
+        // Update the rest of the app
+        outputGradient();
+    });
+
     colorStopsEl.delegate(".color-stop", "click", function(event) {
         var el = $(this);
 
@@ -117,6 +127,7 @@ $(document).ready(function() {
 
         if (!el.hasClass("editing")) {
             $(".stop-position-slider").slider("option", "value", editStop.position);
+            $("#disableCheck").attr("checked", editStop.disabled ? "checked" : "");
             $(".color-sel").css("background-color", ColorStops.getColorValue(editStop.color));
 
             $(".color-stop.editing").removeClass("editing");

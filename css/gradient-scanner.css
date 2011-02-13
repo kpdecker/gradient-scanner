@@ -155,6 +155,7 @@ body {
 }
 .color-stop.disabled {
     opacity: 0.5;
+    text-decoration: line-through;
 }
 .color-stop.editing,
 .color-stop:hover {
