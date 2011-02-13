@@ -152,3 +152,10 @@ body {
     height: 25px;
     margin-right: 5px;
 }
+
+#generatedCss {
+    padding: 15px;
+    overflow: auto;
+
+    border: 1px solid #333;
+}
