@@ -16,6 +16,15 @@ $(document).ready(function() {
 
     var colorStops, editStop, deltaE = ColorStops.JND;
 
+    function renderStop(stop) {
+        var stopEl = $.tmpl("colorStopTemplate", {
+            position: Math.floor(stop.position*1000)/10,
+            colorCss: ColorStops.getColorValue(stop.color)
+        });
+        stopEl.data("stopIndex", index);
+
+        return stopEl;
+    }
     function outputGradient() {
         ColorStops.applyBackground($("#gradientPreview"), "linear", {x: 0, y: 0}, {x: "100%", y: 0}, colorStops);
         $("#stopCount").text("Count: " + colorStops.filter(function(stop) { return !stop.disabled; }).length + " deltaE: " + deltaE);
@@ -29,12 +38,7 @@ $(document).ready(function() {
         GradientScanner.colorStops = colorStops = ColorStops.extractColorStops(GradientScanner.line.imageData.data, deltaE);
 
         colorStops.forEach(function(stop, index) {
-            var stopEl = $.tmpl("colorStopTemplate", {
-                position: Math.floor(stop.position*1000)/10,
-                colorCss: ColorStops.getColorValue(stop.color)
-            });
-            stopEl.data("stopIndex", index);
-            colorStopsEl.append(stopEl);
+            colorStopsEl.append(renderStop(stop));
         });
 
         outputGradient();
@@ -56,6 +60,52 @@ $(document).ready(function() {
         step: 0.001,
         min: 0,
         max: 1,
+        slide: function(event, ui) {
+            var growing = editStop.position < ui.value,
+
+                editingEl = $(".color-stop.editing"),
+                curIndex = editingEl.data("stopIndex"),
+
+                toUpdate = colorStopsEl.children().filter(function() {
+                    var el = $(this),
+                        index = el.data("stopIndex"),
+                        stop = colorStops[index];
+                    if (growing) {
+                        return index > curIndex && stop.position < ui.value;
+                    } else {
+                        return index < curIndex && stop.position > ui.value;
+                    }
+                });
+
+            // Update the stop index for all of the elements that are between this location and
+            // the destination
+            toUpdate.each(function() {
+                var el = $(this);
+                el.data("stopIndex", el.data("stopIndex") + (growing?-1:1));
+            });
+
+            // Update the data model
+            editStop.position = ui.value;
+            colorStops.sort(function(a, b) { return a.position-b.position; });
+
+            // Rerender the element for the updated state
+            var stopEl = renderStop(editStop);
+            if (!toUpdate.length) {
+                editingEl.replaceWith(stopEl);
+            } else if (growing) {
+                toUpdate.last().after(stopEl);
+            } else {
+                toUpdate.first().before(stopEl);
+            }
+            editingEl.remove();
+
+            // Make sure that the element is visible
+            // TODO : Cache this height value
+            colorStopsEl.scrollTop(stopEl.height()*(curIndex-1));
+
+            // Update the rest of the app
+            outputGradient();
+        }
     });
 
     colorStopsEl.delegate(".color-stop", "click", function(event) {
