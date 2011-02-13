@@ -74,6 +74,7 @@ $(document).ready(function() {
 
     canvas.parent().mousedown(function(event) {
         dragging = true;
+        var canvasOffset = canvas.offset();
         dragStart = {x: event.pageX-canvasOffset.left, y: event.pageY-canvasOffset.top};
 
         var edgeSnaps = ImageDataUtils.getInitialSnapToTarget(edgeContext, dragStart);
@@ -88,6 +89,7 @@ $(document).ready(function() {
         event.preventDefault();
     }).mousemove(function(event) {
         if (dragging) {
+            var canvasOffset = canvas.offset();
             dragEnd = {x: event.pageX-canvasOffset.left, y: event.pageY-canvasOffset.top};
 
             // Check for snapto
