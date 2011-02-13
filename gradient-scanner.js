@@ -18,7 +18,7 @@ $(document).ready(function() {
         "colorStopTemplate",
         "<div class=\"color-stop\">"
             + "<div class=\"color-preview\" style=\"background-color: ${colorCss}\"/>"
-            + "${colorCss} ${position}"
+            + "${colorCss} ${position}%"
         + "</div>");
 
     var line, gradientType = "linear", colorStops, deltaE = ColorStops.JND;
@@ -35,7 +35,7 @@ $(document).ready(function() {
 
         colorStops.forEach(function(stop, index) {
             var stopEl = $.tmpl("colorStopTemplate", {
-                position: stop.position,
+                position: Math.floor(stop.position*1000)/10,
                 colorCss: ColorStops.getColorValue(stop.color)
             });
             stopEl.data("stopIndex", index);
