@@ -124,10 +124,12 @@ body {
 
 .display-gradient {
     float: left;
+    margin-bottom: 15px;
 }
 .stop-editor {
     display: none;
     float: right;
+    margin-bottom: 15px;
 }
 .stop-editor.active {
     display: block;
