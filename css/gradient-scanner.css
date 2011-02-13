@@ -169,9 +169,10 @@ body {
     display: block;
 }
 
-#generatedCss {
+.generated-css {
     padding: 15px;
     overflow: auto;
+    clear: both;
 
     border: 1px solid #333;
 }

@@ -35,7 +35,7 @@ $(document).ready(function() {
         line = GradientScanner.line;
 
         var css = ColorStops.generateCSS(gradientType, line.start, line.end, GradientScanner.colorStops);
-        $("#generatedCss")[0].textContent = "background-image: " + css.join(";\nbackground-image: ");
+        $(".generated-css").text("background-image: " + css.join(";\nbackground-image: "));
 
         updatePreview();
     });
