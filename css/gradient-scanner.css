@@ -122,7 +122,19 @@ body {
     height: 50px;
 }
 
-.delta-e-slider {
+.display-gradient {
+    float: left;
+}
+.stop-editor {
+    display: none;
+    float: right;
+}
+.stop-editor.active {
+    display: block;
+}
+
+.delta-e-slider,
+.stop-position-slider {
     margin: 5px 0;
     width: 400px;
 }
@@ -142,6 +154,7 @@ body {
 .color-stop.disabled {
     opacity: 0.5;
 }
+.color-stop.editing,
 .color-stop:hover {
     background-color: #0AE;
     cursor: pointer;
@@ -151,6 +164,9 @@ body {
     width: 25px;
     height: 25px;
     margin-right: 5px;
+}
+.stop-editor-field {
+    display: block;
 }
 
 #generatedCss {

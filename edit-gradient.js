@@ -14,7 +14,7 @@ $(document).ready(function() {
 
     var colorStopsEl = $("#colorStops");
 
-    var colorStops, deltaE = ColorStops.JND;
+    var colorStops, editStop, deltaE = ColorStops.JND;
 
     function outputGradient() {
         ColorStops.applyBackground($("#gradientPreview"), "linear", {x: 0, y: 0}, {x: "100%", y: 0}, colorStops);
@@ -23,6 +23,9 @@ $(document).ready(function() {
         $(document).trigger(new jQuery.Event("gradientUpdated"));
     }
     function updateGradient() {
+        colorStopsEl.html("");
+        $(".stop-editor").removeClass("active");
+
         GradientScanner.colorStops = colorStops = ColorStops.extractColorStops(GradientScanner.line.imageData.data, deltaE);
 
         colorStops.forEach(function(stop, index) {
@@ -45,14 +48,30 @@ $(document).ready(function() {
         slide: function(event, ui) {
             deltaE = ui.value;
 
-            colorStopsEl.html("");
             updateGradient();
         }
     });
 
+    $(".stop-position-slider").slider({
+        step: 0.001,
+        min: 0,
+        max: 1,
+    });
+
     colorStopsEl.delegate(".color-stop", "click", function(event) {
         var el = $(this);
-        colorStops[el.data("stopIndex")].disabled = el.toggleClass("disabled").hasClass("disabled");
+
+        editStop = colorStops[el.data("stopIndex")];
+
+        if (!el.hasClass("editing")) {
+            $(".stop-position-slider").slider("option", "value", editStop.position);
+
+            $(".color-stop.editing").removeClass("editing");
+            $(".stop-editor").addClass("active");
+        } else {
+            $(".stop-editor").removeClass("active");
+        }
+        el.toggleClass("editing");
 
         outputGradient();
     });

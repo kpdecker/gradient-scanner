@@ -26,13 +26,33 @@
             </div>
             <div id="editor-section" class="flow-section">
                 <h2>Edit Gradient</h2>
-                <div class="gradient-preview">
-                    <img class="preview-component line-preview">
-                    <div id="gradientPreview" class="preview-component"></div>
+                <div class="display-gradient">
+                    <div class="gradient-preview">
+                        <img class="preview-component line-preview">
+                        <div id="gradientPreview" class="preview-component"></div>
+                    </div>
+                    <div class="delta-e-slider"></div>
+                    <div id="stopCount"></div>
+                    <div id="colorStops" class="stops-list"></div>
                 </div>
-                <div class="delta-e-slider"></div>
-                <div id="stopCount"></div>
-                <div id="colorStops" class="stops-list"></div>
+                <div class="stop-editor">
+                    Color:
+                    <div class="color-sel" style="height: 250px; width: 250px; background-color: red; color: green;">
+                        Color Sel Placeholder
+                    </div>
+                    <label class="stop-editor-field">
+                        Position:
+                        <div class="stop-position-slider"></div>
+                    </label>
+                    <label class="stop-editor-field">
+                        <input type="checkbox" id="disableCheck">
+                        Disable Color Stop
+                    </label>
+                    <label class="stop-editor-field">
+                        <input type="checkbox" id="defaultBackground">
+                        Use as default background
+                    </label>
+                </div>
             </div>
             <div id="preview-section" class="flow-section">
                 <h2>Edit Container</h2>
