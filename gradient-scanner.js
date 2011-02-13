@@ -13,28 +13,30 @@ $(document).ready(function() {
     // Provide a 1px transparent image for the preview images
     linePreview.attr("src", "data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=");
 
-    var line, gradientType = "linear";
+    var line, relLine, gradientType = "linear";
 
     function updatePreview() {
-        var containing = LineUtils.containingRect(line.start, line.end, 25),
-            relContaining = LineUtils.containingRect(line.start, line.end),
-
-            // Clip the coords to their containing boxes.
-            relStart = LineUtils.relativeCoords(line.start, relContaining),
-            relEnd = LineUtils.relativeCoords(line.end, relContaining);
+        var containing = LineUtils.containingRect(line.start, line.end, 25);
 
         $(".preview-cell").css("left", containing.x+"px")
                 .css("top", containing.y+"px")
                 .css("width", containing.width+"px")
                 .css("height", containing.height+"px");
 
-        ColorStops.applyBackground($(".preview-cell"), gradientType, relStart, relEnd, GradientScanner.colorStops);
+        ColorStops.applyBackground($(".preview-cell"), gradientType, relLine.start, relLine.end, GradientScanner.colorStops);
     }
 
     $(document).bind("gradientUpdated", function(event) {
         line = GradientScanner.line;
 
-        var css = ColorStops.generateCSS(gradientType, line.start, line.end, GradientScanner.colorStops);
+        // Clip the coords to their containing boxes.
+        var relContaining = LineUtils.containingRect(line.start, line.end)
+        relLine = {
+            start: LineUtils.relativeCoords(line.start, relContaining),
+            end: LineUtils.relativeCoords(line.end, relContaining)
+        };
+
+        var css = ColorStops.generateCSS(gradientType, relLine.start, relLine.end, GradientScanner.colorStops);
         $(".generated-css").text("background-image: " + css.join(";\nbackground-image: "));
 
         updatePreview();
