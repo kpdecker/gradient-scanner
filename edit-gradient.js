@@ -115,6 +115,7 @@ $(document).ready(function() {
 
         if (!el.hasClass("editing")) {
             $(".stop-position-slider").slider("option", "value", editStop.position);
+            $(".color-sel").css("background-color", ColorStops.getColorValue(editStop.color));
 
             $(".color-stop.editing").removeClass("editing");
             $(".stop-editor").addClass("active");
