@@ -120,6 +120,25 @@ $(document).ready(function() {
         outputGradient();
     });
 
+    $(".color-sel").ColorPicker({
+        flat: true,
+        onChange: function(hsb, hex, rgb) {
+            editStop.color[0] = rgb.r;
+            editStop.color[1] = rgb.g;
+            editStop.color[2] = rgb.b;
+
+            var editingEl = $(".color-stop.editing");
+
+            // Rerender the element for the updated state
+            var stopEl = renderStop(editStop, editingEl.data("stopIndex"));
+            stopEl.addClass("editing");
+            editingEl.replaceWith(stopEl);
+
+            // Update the rest of the app
+            outputGradient();
+        }
+    });
+
     colorStopsEl.delegate(".color-stop", "click", function(event) {
         var el = $(this);
 
@@ -128,7 +147,7 @@ $(document).ready(function() {
         if (!el.hasClass("editing")) {
             $(".stop-position-slider").slider("option", "value", editStop.position);
             $("#disableCheck").attr("checked", editStop.disabled ? "checked" : "");
-            $(".color-sel").css("background-color", ColorStops.getColorValue(editStop.color));
+            $(".color-sel").ColorPickerSetColor({r:editStop.color[0], g:editStop.color[1], b:editStop.color[2]});
 
             $(".color-stop.editing").removeClass("editing");
             $(".stop-editor").addClass("active");
