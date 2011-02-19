@@ -76,4 +76,13 @@ $(document).ready(function() {
 
         $(document).trigger(new jQuery.Event("lineUpdated"));
     });
+
+    $(document).bind("imageLoaded", function(event) {
+        GradientScanner.line = {};
+        GradientScanner.resetLinePreview();
+
+        $("#lineOverlay").css("width", 0)
+                .css("left", "-1000px")
+                .css("top", "-1000px");
+    });
 });
