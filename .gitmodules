@@ -7,3 +7,9 @@
 [submodule "test/qunit"]
 	path = test/qunit
 	url = https://github.com/jquery/qunit.git
+[submodule "lib/sass"]
+	path = lib/sass
+	url = git@github.com:kpdecker/sass.js.git
+[submodule "lib/user-image-cache"]
+	path = lib/user-image-cache
+	url = git@github.com:kpdecker/user-image-cache.git
