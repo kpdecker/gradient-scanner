@@ -52,6 +52,8 @@ $(document).ready(function() {
             height: canvas.height()
         });
 
+        $(".generated-css").text("");
+
         $(".preview-cell").css({
             width: "0px",
             height: "0px"
