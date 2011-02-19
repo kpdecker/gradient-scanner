@@ -132,6 +132,11 @@ label {
     -moz-transform-origin: 2px 2px;
     -o-transform-origin: 2px 2px;
     -webkit-transform-origin: 2px 2px;
+
+    /* Default to hidden */
+    top: -1000px;
+    left: -1000px;
+    width: 0;
 }
 
 /* Preview Components */

@@ -13,6 +13,14 @@ $(document).ready(function() {
 
     var dragging, dragStart, dragEnd, imageData;
 
+    function resetLineOverlay() {
+        $("#lineOverlay").css({
+            width: "",
+            top: "",
+            left: ""
+        });
+    }
+
     canvas.parent().mousedown(function(event) {
         // Only activate this if the event is due to a left click
         if (event.which !== 1) {
@@ -81,8 +89,6 @@ $(document).ready(function() {
         GradientScanner.line = {};
         GradientScanner.resetLinePreview();
 
-        $("#lineOverlay").css("width", 0)
-                .css("left", "-1000px")
-                .css("top", "-1000px");
+        resetLineOverlay();
     });
 });
