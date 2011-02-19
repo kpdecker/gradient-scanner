@@ -59,4 +59,6 @@ $(document).ready(function() {
             height: "0px"
         });
     });
+
+    $(".flow-section").flowSection();
 });
