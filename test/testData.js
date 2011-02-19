@@ -14,8 +14,9 @@ $(document).ready(function() {
         context.fill();
         context.closePath();
     }
-    var canvas = document.getElementById("imageDisplay"),
+    var canvas = document.createElement("canvas"),
         context = canvas.getContext("2d");
+    canvas.width = canvas.height = 600;
 
     context.fillRect(0,0,50,50);
 
@@ -33,12 +34,14 @@ $(document).ready(function() {
     $(img).load(function() {
         context.drawImage(img, 100, 100);
 
-        edgeContext = ImageDataUtils.getEdgeContext(canvas);
+        GradientScanner.loadImage(canvas, "example image");
     });
 
     img.src = "test/css-gradient-dropdown-menu.gif";
 
-    setTimeout(function() {
+    $(document).bind("imageLoaded", function lineSeed() {
+        $(this).unbind("imageLoaded", lineSeed);
+
         var offset = $("#imageDisplay").offset();
 
         var mousedown = jQuery.Event("mousedown");
@@ -89,8 +92,9 @@ $(document).ready(function() {
         mousemove.pageX += offset.left;
         mousemove.pageY += offset.top;
 
-        $(canvas).trigger(mousedown)
+        $("#imageDisplay")
+                .trigger(mousedown)
                 .trigger(mousemove)
                 .trigger(jQuery.Event("mouseup"));
-    }, 500);
+    });
 });

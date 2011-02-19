@@ -18,10 +18,20 @@
             <h1>gradient-scanner</h1>
         </div>
         <div class="content">
+            <div id="errorMsg"></div>
             <div id="image-section" class="flow-section">
                 <h2>Select Image</h2>
+                <label>
+                    Image:
+                    <input type="text" id="pathToImage">
+                    <span class="fileInput localDependent">
+                        <input type="button" value="Browse...">
+                        <input type="file" accept="image/*" id="localImage">
+                    </span>
+                </label>
+
                 <div class="image-display">
-                    <canvas id="imageDisplay" width="600" height="600"></canvas>
+                    <canvas id="imageDisplay"></canvas>
                     <div id="lineOverlay"></div>
                 </div>
                 <img class="preview-component line-preview">
@@ -73,6 +83,7 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
     <script type="text/javascript" src="lib/jquery-tmpl/jquery.tmpl.min.js"></script>
     <script type="text/javascript" src="lib/colorpicker/js/colorpicker.js"></script>
+    <script type="text/javascript" src="lib/user-image-cache/user-image-cache.js"></script>
 
     <script type="text/javascript" src="lib/pixastic/pixastic.core.js"></script>
     <script type="text/javascript" src="lib/pixastic/actions/edges.js"></script>
@@ -82,6 +93,7 @@
     <script type="text/javascript" src="color-stops.js"></script>
 
     <script type="text/javascript" src="section-flow.js"></script>
+    <script type="text/javascript" src="image-loader.js"></script>
     <script type="text/javascript" src="line-selector.js"></script>
     <script type="text/javascript" src="edit-gradient.js"></script>
     <script type="text/javascript" src="gradient-scanner.js"></script>

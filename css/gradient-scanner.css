@@ -45,6 +45,11 @@ body {
     overflow: hidden;
 }
 
+.errorMsg {
+    color: red;
+    padding: 10px;
+}
+
 .footer {
     background-color: black;
     padding: 5px 10px;
@@ -77,6 +82,37 @@ body {
 .flow-prev.active,
 .flow-next.active {
     display: block;
+}
+
+/* File Input Click Handler: See http://www.quirksmode.org/dom/inputfile.html */
+.no-local .localDependent {
+    display: none;
+}
+
+label {
+    display: block;
+}
+
+#pathToImage {
+    width: 250px;
+    margin-left: 0.6em;
+}
+.fileInput {
+    position: relative;
+}
+
+.fileInput > input[type="button"] {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+}
+
+.fileInput > input[type='file'] {
+    position: relative;
+    text-align: right;
+    opacity: 0;
+    z-index: 2;
 }
 
 /* Line Overlay Components */

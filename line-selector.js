@@ -3,7 +3,6 @@
  * See LICENSE for license information
  */
 /*global $,jQuery,LineUtils,ImageDataUtils,GradientScanner */
-var edgeContext;        // Global for now, move to ready scope once the file loader is complete
 $(document).ready(function() {
     const SNAP_TO_PX = 10;
 
@@ -24,7 +23,7 @@ $(document).ready(function() {
         var canvasOffset = canvas.offset();
         dragStart = {x: event.pageX-canvasOffset.left, y: event.pageY-canvasOffset.top};
 
-        var edgeSnaps = ImageDataUtils.getInitialSnapToTarget(edgeContext, dragStart);
+        var edgeSnaps = ImageDataUtils.getInitialSnapToTarget(GradientScanner.edgeContext, dragStart);
         dragStart = edgeSnaps || dragStart;
         // Init the line overlay
         $("#lineOverlay").css("width", "0px")
@@ -45,7 +44,7 @@ $(document).ready(function() {
             }
 
             // Check for edge snapto
-            var edgeSnap = ImageDataUtils.getSnapToTarget(edgeContext, dragStart, dragEnd);
+            var edgeSnap = ImageDataUtils.getSnapToTarget(GradientScanner.edgeContext, dragStart, dragEnd);
             dragEnd = edgeSnap || dragEnd;
 
             // Collect the line data while the user is dragging
