@@ -160,4 +160,10 @@ $(document).ready(function() {
     });
 
     $(document).bind("lineUpdated", updateGradient);
+    $(document).bind("imageLoaded", function(event) {
+        $("#gradientPreview").css("background", "none");
+
+        colorStopsEl.html("");
+        $(".stop-editor").removeClass("active");
+    });
 });
