@@ -10,8 +10,11 @@ var GradientScanner = {};
 $(document).ready(function() {
     var linePreview = $(".line-preview");
 
-    // Provide a 1px transparent image for the preview images
-    linePreview.attr("src", "data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=");
+    GradientScanner.resetLinePreview = function() {
+        // Provide a 1px transparent image for the preview images
+        linePreview.attr("src", "data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==");
+    };
+    GradientScanner.resetLinePreview();
 
     var line, relLine, gradientType = "linear";
 
