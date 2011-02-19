@@ -33,7 +33,7 @@ $(document).ready(function() {
         line = GradientScanner.line;
 
         // Clip the coords to their containing boxes.
-        var relContaining = LineUtils.containingRect(line.start, line.end)
+        var relContaining = LineUtils.containingRect(line.start, line.end);
         relLine = {
             start: LineUtils.relativeCoords(line.start, relContaining),
             end: LineUtils.relativeCoords(line.end, relContaining)
@@ -43,5 +43,18 @@ $(document).ready(function() {
         $(".generated-css").text("background-image: " + css.join(";\nbackground-image: "));
 
         updatePreview();
+    });
+
+    $(document).bind("imageLoaded", function(event) {
+        var canvas = $("#imageDisplay");
+        $(".preview-frame").css({
+            width: canvas.width(),
+            height: canvas.height()
+        });
+
+        $(".preview-cell").css({
+            width: "0px",
+            height: "0px"
+        });
     });
 });
