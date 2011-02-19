@@ -72,16 +72,16 @@ body {
     display: block;
 }
 .flow-prev {
-    display: none;
+    visibility: hidden;
     float: left;
 }
 .flow-next {
-    display: none;
+    visibility: hidden;
     float: right;
 }
 .flow-prev.active,
 .flow-next.active {
-    display: block;
+    visibility: visible;
 }
 
 /* File Input Click Handler: See http://www.quirksmode.org/dom/inputfile.html */
