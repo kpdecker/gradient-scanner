@@ -58,6 +58,8 @@ $(document).ready(function() {
             width: "0px",
             height: "0px"
         });
+
+        $(".flow-section").flowSection("disable", true);
     });
 
     $(".flow-section").flowSection();

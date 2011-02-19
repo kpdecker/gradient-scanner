@@ -38,6 +38,14 @@ $(document).ready(function() {
                 .css("left", dragStart.x+"px")
                 .css("top", dragStart.y+"px");
 
+        // Reset any existing data
+        dragEnd = undefined;
+        imageData = undefined;
+
+        GradientScanner.line = {};
+        GradientScanner.resetLinePreview();
+        $(".flow-section").flowSection("disable", true);
+
         event.preventDefault();
     }).mousemove(function(event) {
         if (dragging) {
@@ -58,6 +66,7 @@ $(document).ready(function() {
             // Collect the line data while the user is dragging
             imageData = ImageDataUtils.getLinePixels(context, dragStart, dragEnd);
             if (!imageData) {
+                GradientScanner.resetLinePreview();
                 return;
             }
 
@@ -76,6 +85,12 @@ $(document).ready(function() {
     }).mouseup(function(event) {
         dragging = false;
 
+        // If they didn't move the mouse then there isn't much we can do
+        if (!dragEnd || !LineUtils.distance(dragStart, dragEnd)) {
+            resetLineOverlay();
+            return;
+        }
+
         GradientScanner.line = {
             start: dragStart,
             end: dragEnd,
@@ -83,6 +98,7 @@ $(document).ready(function() {
         };
 
         $(document).trigger(new jQuery.Event("lineUpdated"));
+        $(".flow-section").flowSection("enableNext");
     });
 
     $(document).bind("imageLoaded", function(event) {
