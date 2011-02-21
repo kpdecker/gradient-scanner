@@ -45,9 +45,8 @@ body {
     overflow: hidden;
 }
 
-.errorMsg {
+#errorMsg {
     color: red;
-    padding: 10px;
 }
 
 .footer {
