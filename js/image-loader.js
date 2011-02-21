@@ -34,6 +34,7 @@ $(document).ready(function() {
         })
         .error(function() { errorHandler(); });
     UserImageCache.setImageEl(loader);
+    UserImageCache.setRemoteProxy("http://" + location.host + "/proxy?href=");
 
     // User Input Setup
     pathToImage.change(function(event) {
