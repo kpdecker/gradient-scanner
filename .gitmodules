@@ -13,3 +13,6 @@
 [submodule "lib/user-image-cache"]
 	path = lib/user-image-cache
 	url = git@github.com:kpdecker/user-image-cache.git
+[submodule "server/lib/connect"]
+	path = server/lib/connect
+	url = git@github.com:kpdecker/connect.git
