@@ -22,7 +22,16 @@
             <div id="image-section" class="flow-section">
                 <h2>Select Image</h2>
                 <label>
-                    Image:
+                    Image<div class="info-marker">
+                        *
+                        <div class="info">
+                            Local files are only supported on browsers that support the <a href="http://www.w3.org/TR/FileAPI/">File API</a>.
+                            If supported a browse button will appear next to the text box.
+                            <br>
+                            <br>
+                            Due to the <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#security-with-canvas-elements">security requirements</a> of the canvas API, remote URLs will be proxied through this server. Any URLs that require authentication to access will not be available.
+                        </div>
+                    </div>:
                     <input type="text" id="pathToImage">
                     <span class="fileInput localDependent">
                         <input type="button" value="Browse...">
