@@ -15,7 +15,16 @@ Utility to generate CSS3 gradients from source raster files like mock images.
 
 ### Development Requirements
 Development of the app must be done over a HTTP connection (or connection other than file://) due to the canvas [security model](http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#security-with-canvas-elements).
-This requirement may be lifted once File APIs are supported.
+
+### Node Server Setup
+In order to access files that are on URLs outside of the current server, we must proxy images due to the security model.
+
+    $ npm install express
+
+### Node Server Execution
+
+    $ cd ./server
+    $ node main.js
 
 ## Development Plan
 Development currently mid-phase 1.
