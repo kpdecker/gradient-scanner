@@ -3,7 +3,8 @@ var connect = require("./lib/connect/lib/connect"),
     http = require("http"),
     url = require("url");
 
-var app = express.createServer();
+var app = express.createServer(),
+    port = process.env.GRADIENT_SCANNER_PORT || 3000;
 
 app.configure(function(){
     app.use(app.router);
@@ -37,4 +38,5 @@ app.get('/proxy', function(req, res){
     });
 });
 
-app.listen(3000);
+console.log("Starting gradient scanner server on port", port);
+app.listen(port);
