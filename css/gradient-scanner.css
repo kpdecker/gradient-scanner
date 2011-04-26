@@ -168,18 +168,6 @@ label {
     width: 0;
 }
 
-/* Preview Components */
-.preview-frame {
-    position: relative;
-    display: inline-block;
-
-    background-color: white;
-    border: 1px solid black;
-}
-.preview-cell {
-    position: absolute;
-}
-
 /* Focus Line Preview Components */
 .gradient-preview {
     display: inline-block;

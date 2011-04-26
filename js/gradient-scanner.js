@@ -18,17 +18,6 @@ $(document).ready(function() {
 
     var line, relLine, gradientType = "linear";
 
-    function updatePreview() {
-        var containing = LineUtils.containingRect(line.start, line.end, 25);
-
-        $(".preview-cell").css("left", containing.x+"px")
-                .css("top", containing.y+"px")
-                .css("width", containing.width+"px")
-                .css("height", containing.height+"px");
-
-        ColorStops.applyBackground($(".preview-cell"), gradientType, relLine.start, relLine.end, GradientScanner.colorStops);
-    }
-
     $(document).bind("gradientUpdated", function(event) {
         line = GradientScanner.line;
 
@@ -41,23 +30,10 @@ $(document).ready(function() {
 
         var css = ColorStops.generateCSS(gradientType, relLine.start, relLine.end, GradientScanner.colorStops);
         $(".generated-css").text("background-image: " + css.join(";\nbackground-image: "));
-
-        updatePreview();
     });
 
     $(document).bind("imageLoaded", function(event) {
-        var canvas = $("#imageDisplay");
-        $(".preview-frame").css({
-            width: canvas.width(),
-            height: canvas.height()
-        });
-
         $(".generated-css").text("");
-
-        $(".preview-cell").css({
-            width: "0px",
-            height: "0px"
-        });
 
         $(".flow-section").flowSection("disable", true);
     });
