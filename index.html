@@ -45,15 +45,27 @@
                 </div>
                 <img class="preview-component line-preview">
             </div>
+            <div id="sensitivity-section" class="flow-section">
+                <h2>Adjust Color Sensitivity</h2>
+                <div class="display-gradient">
+                    <div class="gradient-preview">
+                        <img class="preview-component line-preview">
+                        <div class="preview-component gradient-preview"></div>
+                    </div>
+                    <div class="delta-e-slider"></div>
+                    <div class="stop-count"></div>
+                </div>
+                <pre class="generated-css"></pre>
+            </div>
+
             <div id="editor-section" class="flow-section">
                 <h2>Edit Gradient</h2>
                 <div class="display-gradient">
                     <div class="gradient-preview">
                         <img class="preview-component line-preview">
-                        <div id="gradientPreview" class="preview-component"></div>
+                        <div class="preview-component gradient-preview"></div>
                     </div>
-                    <div class="delta-e-slider"></div>
-                    <div id="stopCount"></div>
+                    <div class="stop-count"></div>
                     <div id="colorStops" class="stops-list"></div>
                 </div>
                 <div class="stop-editor">
@@ -104,6 +116,7 @@
     <script type="text/javascript" src="js/flow-section.js"></script>
     <script type="text/javascript" src="js/image-loader.js"></script>
     <script type="text/javascript" src="js/line-selector.js"></script>
+    <script type="text/javascript" src="js/sensitivity.js"></script>
     <script type="text/javascript" src="js/edit-gradient.js"></script>
     <script type="text/javascript" src="js/gradient-scanner.js"></script>
     <script type="text/javascript" src="test/testData.js"></script>     <!-- WARN : For testing only. Should be removed as the app matures -->

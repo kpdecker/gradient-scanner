@@ -27,16 +27,13 @@ $(document).ready(function() {
         return stopEl;
     }
     function outputGradient() {
-        ColorStops.applyBackground($("#gradientPreview"), "linear", {x: 0, y: 0}, {x: "100%", y: 0}, colorStops);
-        $("#stopCount").text("Count: " + colorStops.filter(function(stop) { return !stop.disabled; }).length + " deltaE: " + deltaE);
-
         $(document).trigger(new jQuery.Event("gradientUpdated"));
     }
     function updateGradient() {
+        colorStops = GradientScanner.colorStops;
+
         colorStopsEl.html("");
         $(".stop-editor").removeClass("active");
-
-        GradientScanner.colorStops = colorStops = ColorStops.extractColorStops(GradientScanner.line.imageData.data, deltaE);
 
         colorStops.forEach(function(stop, index) {
             colorStopsEl.append(renderStop(stop, index));
@@ -44,18 +41,6 @@ $(document).ready(function() {
 
         outputGradient();
     }
-
-    $(".delta-e-slider").slider({
-        value: deltaE,
-        step: 0.5,
-        min: 1,
-        max: 15,
-        slide: function(event, ui) {
-            deltaE = ui.value;
-
-            updateGradient();
-        }
-    });
 
     $(".stop-position-slider").slider({
         step: 0.001,
@@ -159,11 +144,5 @@ $(document).ready(function() {
         outputGradient();
     });
 
-    $(document).bind("lineUpdated", updateGradient);
-    $(document).bind("imageLoaded", function(event) {
-        $("#gradientPreview").css("background", "none");
-
-        colorStopsEl.html("");
-        $(".stop-editor").removeClass("active");
-    });
+    $(document).bind("deltaEUpdated", updateGradient);
 });
