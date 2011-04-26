@@ -122,10 +122,13 @@ var ColorStops = {};
             stops.splice(0, 1);
         }
 
-        // Check to see if the current element is on the same line as the previous and next. If so remove.
         var len = stops.length;
         for (var i = 1; i < len-1; i++) {
-            if (stopsLinear(stops[i-1], stops[i], stops[i+1], dELimit)) {
+            var prev = stops[i-1],
+                cur = stops[i],
+                next = stops[i+1];
+            // Check to see if the current element is on the same line as the previous and next. If so remove.
+            if (stopsLinear(prev, cur, next, dELimit)) {
                 stops.splice(i, 1);
                 i--;    len--;
             }
