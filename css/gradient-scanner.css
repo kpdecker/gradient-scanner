@@ -63,6 +63,10 @@ body {
     color: #6598B8;
 }
 
+.help-text {
+    padding: 0 0 15px 15px;
+}
+
 /* Flow */
 .flow-section {
     display: none;
