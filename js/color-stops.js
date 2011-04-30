@@ -326,7 +326,7 @@ var ColorStops = {};
         },
         opera: function(type, dragStart, dragEnd, colorStops, container) {
             return newGenerator("o", type, dragStart, dragEnd, colorStops, container);
-        },
+        }
     };
 
     ColorStops.generateCSS = function(type, dragStart, dragEnd, colorStops, container) {
