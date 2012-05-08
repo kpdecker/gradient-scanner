@@ -3,7 +3,7 @@ var express = require("express"),
     url = require("url");
 
 var app = express.createServer(),
-    port = process.env.GRADIENT_SCANNER_PORT || 3000;
+    port = process.env.PORT || 3000;
 
 app.configure(function(){
     app.use(app.router);
