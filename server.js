@@ -1,5 +1,4 @@
-var connect = require("./lib/connect/lib/connect"),
-    express = require("express"),
+var express = require("express"),
     http = require("http"),
     url = require("url");
 
@@ -8,7 +7,7 @@ var app = express.createServer(),
 
 app.configure(function(){
     app.use(app.router);
-    app.use(connect.staticProvider({root: "..", exclude: /.*\/server\/.*/ig}));
+    app.use(express.static(__dirname));
 });
 
 app.get('/proxy', function(req, res){
