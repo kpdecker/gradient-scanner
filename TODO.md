@@ -1,11 +1,8 @@
 # TODO
-- Implement a basic gradient editor UI
-- Basic layout
 - CSS generation
     - Cross browser
 - Implement the help UI
 - Investigate the effects that blurring the image can have on the final result
-- Proxy for browsers that do not support File API
 - Preview UI
 - Radial support
 - Repeating support
