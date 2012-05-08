@@ -1,0 +1,17 @@
+{
+  "author": "Kevin Decker <kpdecker@gmail.com> (http://incaseofstairs.com)",
+  "name": "gradient-scanner",
+  "version": "0.2.0",
+  "homepage": "http://gradient-scanner.com",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kpdecker/gradient-scanner.git"
+  },
+  "engines": {
+    "node": "~0.4.5"
+  },
+  "dependencies": {
+    "express": "~2.5"
+  },
+  "devDependencies": {}
+}
