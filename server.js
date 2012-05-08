@@ -7,6 +7,20 @@ var app = express.createServer(),
 
 app.configure(function(){
     app.use(app.router);
+    app.use(function(req, res, next) {
+      // Filter out non-content. Ideally this would be in a subdir
+      // but didn't want to move as the focus is the static client content.
+      if ('/' === req.url
+          || '/index.html' === req.url
+          || '/index.htm' === req.url
+          || /^\/css\//.test(req.url)
+          || /^\/lib\//.test(req.url)
+          || /^\/js\//.test(req.url)) {
+        next();
+      } else {
+        res.send(404);
+      }
+	  });
     app.use(express.static(__dirname));
 });
 
