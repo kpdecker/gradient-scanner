@@ -8,10 +8,10 @@
     "url": "git://github.com/kpdecker/gradient-scanner.git"
   },
   "engines": {
-    "node": "~0.4.5"
+    "node": "~0.6"
   },
   "dependencies": {
-    "express": "~2.5"
+    "express": "*"
   },
   "devDependencies": {}
 }
