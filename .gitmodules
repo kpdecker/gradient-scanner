@@ -3,16 +3,10 @@
 	url = https://github.com/jquery/jquery-tmpl.git
 [submodule "lib/pixastic"]
 	path = lib/pixastic
-	url = git@github.com:kpdecker/pixastic.git
+	url = https://github.com/kpdecker/pixastic.git
 [submodule "test/qunit"]
 	path = test/qunit
 	url = https://github.com/jquery/qunit.git
-[submodule "lib/sass"]
-	path = lib/sass
-	url = git@github.com:kpdecker/sass.js.git
 [submodule "lib/user-image-cache"]
 	path = lib/user-image-cache
-	url = git@github.com:kpdecker/user-image-cache.git
-[submodule "server/lib/connect"]
-	path = server/lib/connect
-	url = git@github.com:kpdecker/connect.git
+	url = https://github.com/kpdecker/user-image-cache.git
