@@ -290,7 +290,7 @@ var ColorStops = {};
         position = position + (position && ", ");
 
         if (type === "linear") {
-            return "-" + prefix + "-linear-gradient(" + position + stopCSS + ")";
+            return (prefix ? '-' + prefix + '-' : '') + 'linear-gradient(' + position + stopCSS + ')';
         } else if (type === "radial") {
         }
     }
@@ -326,6 +326,9 @@ var ColorStops = {};
         },
         opera: function(type, dragStart, dragEnd, colorStops, container) {
             return newGenerator("o", type, dragStart, dragEnd, colorStops, container);
+        },
+        standard: function(type, dragStart, dragEnd, colorStops, container) {
+            return newGenerator('', type, dragStart, dragEnd, colorStops, container);
         }
     };
 
