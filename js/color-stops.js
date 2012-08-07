@@ -286,11 +286,16 @@ var ColorStops = {};
             point = !LineUtils.isOnEdge(dragStart, container) ? formatUnit(dragStart.x) + " " + formatUnit(dragStart.y) : "";
 
         // Generate the position component if necessary
-        var position = (angle !== 270 ? angle + "deg" : "");
-        position = position + (position && ", ");
+        var unprefixedAngle = Math.abs(angle - 450) % 360,
+            position = angle !== 270 ? angle + 'deg, ' : '',
+            unprefixedPosition = unprefixedAngle !== 180 ? unprefixedAngle + 'deg, ' : '';
 
         if (type === "linear") {
-            return (prefix ? '-' + prefix + '-' : '') + 'linear-gradient(' + position + stopCSS + ')';
+            return (prefix ? '-' + prefix + '-' : '')
+                + 'linear-gradient('
+                    + (prefix ? position : unprefixedPosition)
+                    + stopCSS
+                + ')';
         } else if (type === "radial") {
         }
     }
