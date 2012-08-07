@@ -111,7 +111,7 @@ var ColorStops = {};
     function cullDuplicates(stops, dELimit) {
         const EDGE_DISTANCE = 0.01;
 
-        dELimit = dELimit || ColorsStops.JND;
+        dELimit = dELimit || ColorStops.JND;
         if (stops.length < 2) {
             return;
         }
